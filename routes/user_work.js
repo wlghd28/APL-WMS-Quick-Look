@@ -3,7 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
-const   session     = require('express-session');
+//const   session     = require('express-session');
 const   router      = express.Router();
 const   moment      = require('moment');
 const   async       = require('async');
@@ -29,18 +29,27 @@ const db = mysql.createConnection({
 const GetInquireWorkSheet = (req, res) => {
 
     if (req.session.userid) {
+        // 주업무 데이터를 가져오는 쿼리문
         let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id = ?";
         let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id = ?";
         let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+
+        // 부업무 데이터를 가져오는 쿼리문
+        let sub_last_sql_str    = "SELECT * FROM SUB_LAST_WORK WHERE user_id = ?";
+        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
+        let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
+
+
         let htmlStream      = '';
     
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
+        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
         let last_result, this_result, future_result;
-
+        let sub_last_result, sub_this_result, sub_future_result;
         // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
         async.waterfall([
             function(callback) {
@@ -50,6 +59,14 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else{
                             last_result = results;
+                    }
+                });
+                db.query(sub_last_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else{
+                            sub_last_result = results;
                     }
                 });
                 callback(null);
@@ -64,6 +81,18 @@ const GetInquireWorkSheet = (req, res) => {
                             this_result = '없음';
                         else {
                             this_result = results[0].work;
+                        }
+                    }
+                });
+                db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        if (results.length <= 0)
+                            sub_this_result = '없음';
+                        else {
+                            sub_this_result = results[0].work;
                         }
                     }
                 });
@@ -82,13 +111,33 @@ const GetInquireWorkSheet = (req, res) => {
                         }
                     }
                     console.log(last_result);
-                    res.end(ejs.render(htmlStream, {
-                                                    'title'         :'업무관리 프로그램',
-                                                    'url'           :'../../',
-                                                    lastWork        :last_result,
-                                                    'thisWork'      :this_result,
-                                                    'futureWork'    :future_result}));
+                   
                 });
+                db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        if (results.length <= 0) 
+                            sub_future_result = '없음';
+                        else {
+                            sub_future_result = results[0].work;
+                        }
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                res.end(ejs.render(htmlStream, {
+                    'title'         :'업무관리 프로그램',
+                    'url'           :'../../',
+                    lastWork        :last_result,
+                    'thisWork'      :this_result,
+                    'futureWork'    :future_result,
+                    sub_lastWork    :sub_last_result,
+                    'sub_thisWork'  :sub_this_result,
+                    'sub_futureWork':sub_future_result,
+                }));
                 callback(null);
             }
         ], function(error, result) {
@@ -113,6 +162,7 @@ const  GetThisWorkSheet = (req, res) => {
     // 로그인에 성공했을 경우에만 업무 등록을 할 수 있음
     if (req.session.userid) {
         let this_sql_str     = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let sub_this_sql_str = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
         let htmlStream  = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
@@ -120,16 +170,44 @@ const  GetThisWorkSheet = (req, res) => {
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
 
-        db.query(this_sql_str, [req.session.userid], (error, results) => {
-            if(error){
-                console.log(error);
-                res.end("error");
-            } else {
+        let this_work, sub_this_work;
+
+
+        async.waterfall([
+            function(callback) {
+                db.query(this_sql_str, [req.session.userid], (error, results) => {
+                    if(error){
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        this_work = results;
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
+                    if(error){
+                        console.log(error);
+                        res.end("error");
+                    } else {    
+                        sub_this_work = results;            
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
                 res.end(ejs.render(htmlStream, {
-                                                'title'     :'업무관리 프로그램',
-                                                'url'       :'../../',
-                                                thisWork    :results })); 
+                    'title'     :'업무관리 프로그램',
+                    'url'       :'../../',
+                    thisWork    :this_work,
+                    sub_thisWork:sub_this_work
+                 })); 
+                callback(null);
             }
+        ], function(error, result) {
+            if (error)
+                console.log(error);
         });
     } else {
         let errorHtmlStream = '';
@@ -148,16 +226,23 @@ const HandleThisWorkSheet = (req, res) => {
 
     if (req.session.userid) {
         console.log('금주 업무 등록 요청보냄');
+        // 주업무 등록하는 쿼리문
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE THIS_WORK SET work = ? WHERE user_id = ?';
+
+        // 부업무 등록하는 쿼리문
+        let sub_sql_str1 = 'SELECT * FROM SUB_THIS_WORK WHERE user_id = ?';
+        let sub_sql_str2 = 'INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sub_sql_str3 = 'UPDATE SUB_THIS_WORK SET work = ? WHERE user_id = ?';
+
         let body = req.body;
         let userid = req.session.userid;
         //let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
-
+        let sub_work = body.sub_work;
 
         start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
         end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
@@ -169,37 +254,76 @@ const HandleThisWorkSheet = (req, res) => {
         console.log(end_date);
         console.log('POST 데이터 받음');
 
-        // 금주 업무 등록이 되어있는지 조사합니다.
-        db.query(sql_str1, [userid], (error, results) => {
-            if (error) {     
-                console.log(error);
-                res.end("error");
-            } else {
-
-                // 금주 업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
-                if (results[0] == null) {
-                    db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
-                            if (error) {
-                                res.end("error");
-                                console.log(error);
-                            } else {
-                                console.log('Insertion into DB was completed!');
-                                res.redirect('/userwork/inquire_worksheet');
-                            }
-                    }); // db.query();
-                } else { // 금주 업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
-                    db.query(sql_str3, [work, userid], (error) => {
-                        if (error) {
-                            res.end("error");
-                            console.log(error);
-                        } else {
-                            console.log('update set DB was completed!');
-                            res.redirect('/userwork/inquire_worksheet');
-                        }
-                    }); // db.query();
-                }              
+        async.waterfall([
+            function(callback) {
+                db.query(sql_str1, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {      
+                        // 금주 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
+                        if (results[0] == null) {
+                            db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
+                                    if (error) {
+                                        res.end("error");
+                                        console.log(error);
+                                    } else {
+                                        console.log('Insertion into DB was completed!');
+                                    }
+                            }); // db.query();
+                        } else { // 금주 주업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
+                            db.query(sql_str3, [work, userid], (error) => {
+                                if (error) {
+                                    res.end("error");
+                                    console.log(error);
+                                } else {
+                                    console.log('update set DB was completed!');           
+                                }
+                            }); // db.query();
+                        }              
+                    }
+                });
+                db.query(sub_sql_str1, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {
+        
+                        // 금주 부업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
+                        if (results[0] == null) {
+                            db.query(sub_sql_str2, [start_date, end_date, userid, sub_work], (error) => {
+                                    if (error) {
+                                        res.end("error");
+                                        console.log(error);
+                                    } else {
+                                        console.log('Insertion into DB was completed!');
+                                       
+                                    }
+                            }); // db.query();
+                        } else { // 금주 부업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
+                            db.query(sub_sql_str3, [sub_work, userid], (error) => {
+                                if (error) {
+                                    res.end("error");
+                                    console.log(error);
+                                } else {
+                                    console.log('update set DB was completed!');
+                                }
+                            }); // db.query();
+                        }              
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                res.redirect('/userwork/inquire_worksheet');
+                callback(null);
             }
+        ], function(error, result) {
+            if (error)
+                console.log(error);
         });
+        // 금주 업무 등록이 되어있는지 조사합니다.
+        
     } else {
         let errorHtmlStream = '';
         errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
@@ -217,6 +341,8 @@ const  GetFutureWorkSheet = (req, res) => {
     
     if (req.session.userid) {
         let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let sub_future_sql_str = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
+
         let htmlStream = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
@@ -224,16 +350,40 @@ const  GetFutureWorkSheet = (req, res) => {
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
-        db.query(future_sql_str, [req.session.userid], (error, results) => {
-            if (error) {
-                console.log(error);
-                res.end("error");
-            } else {
-                    res.end(ejs.render(htmlStream, {
-                                                    'title'         :'업무관리 프로그램',
-                                                    'url'           :'../../',
-                                                    futureWork      :results })); 
+        let futureWork, sub_futureWork;
+
+        async.waterfall([
+            function(callback) {
+                db.query(future_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                           futureWork = results;
+                    }
+                });
+                db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
+                    if (error) {
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                        sub_futureWork =  results;
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                res.end(ejs.render(htmlStream, {
+                    'title'         :'업무관리 프로그램',
+                    'url'           :'../../',
+                    futureWork      :futureWork,
+                    sub_futureWork  :sub_futureWork
+                 })); 
+                callback(null);
             }
+        ],  function(error, result) {
+            if (error)
+                console.log(error);
         });
     } else {
         let errorHtmlStream = '';
@@ -255,12 +405,19 @@ const HandleFutureWorkSheet = (req, res) => {
         let sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
+
+        let sub_sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
+        let sub_sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sub_sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
+        
+        
         let body = req.body;
         let userid = req.session.userid;
         //let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
+        let sub_work = body.sub_work;
 
         start_date = moment().add(6 - today, 'days').format("YYYY-MM-DD");
         end_date = moment().add(13 - today, 'days').format("YYYY-MM-DD");
@@ -271,36 +428,75 @@ const HandleFutureWorkSheet = (req, res) => {
         console.log(end_date);
         console.log('POST 데이터 받음');
 
-        // 예정된 업무 등록이 되어있는지 조사합니다.
-        db.query(sql_str1, [userid], (error, results) => {
-            if (error) {     
-                console.log(error);
-                res.end("error");
-            } else {
+        async.waterfall([
+            function(callback) {
+                // 예정된 주업무 등록이 되어있는지 조사합니다.
+                db.query(sql_str1, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {
 
-                // 예정된 업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
-                if (results[0] == null) {
-                    db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
-                            if (error) {
-                                res.end("error");
-                                console.log(error);
-                            } else {
-                                console.log('Insertion into DB was completed!');
-                                res.redirect('/userwork/inquire_worksheet');
-                            }
-                    }); // db.query();
-                } else { // 예정된 업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
-                    db.query(sql_str3, [work, userid], (error) => {
-                        if (error) {
-                            res.end("error");
-                            console.log(error);
-                        } else {
-                            console.log('update set DB was completed!');
-                            res.redirect('/userwork/inquire_worksheet');
-                        }
-                    }); // db.query();
-                }              
+                        // 예정된 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
+                        if (results[0] == null) {
+                            db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
+                                    if (error) {
+                                        res.end("error");
+                                        console.log(error);
+                                    } else {
+                                        console.log('Insertion into DB was completed!');                                   
+                                    }
+                            }); // db.query();
+                        } else { // 예정된 주업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
+                            db.query(sql_str3, [work, userid], (error) => {
+                                if (error) {
+                                    res.end("error");
+                                    console.log(error);
+                                } else {
+                                    console.log('update set DB was completed!');                                  
+                                }
+                            }); // db.query();
+                        }              
+                    }
+                });
+                // 예정된 부업무 등록이 되어있는지 조사합니다.
+                db.query(sub_sql_str1, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {
+
+                        // 예정된 부업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
+                        if (results[0] == null) {
+                            db.query(sub_sql_str2, [start_date, end_date, userid, sub_work], (error) => {
+                                    if (error) {
+                                        res.end("error");
+                                        console.log(error);
+                                    } else {
+                                        console.log('Insertion into DB was completed!');                                       
+                                    }
+                            }); // db.query();
+                        } else { // 예정된 부업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
+                            db.query(sub_sql_str3, [sub_work, userid], (error) => {
+                                if (error) {
+                                    res.end("error");
+                                    console.log(error);
+                                } else {
+                                    console.log('update set DB was completed!');
+                                }
+                            }); // db.query();
+                        }              
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
+                res.redirect('/userwork/inquire_worksheet');
+                callback(null);
             }
+        ],  function(error, result) {
+            if (error)
+                console.log(error);
         });
     } else {
         let errorHtmlStream = '';
