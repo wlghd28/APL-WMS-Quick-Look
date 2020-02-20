@@ -58,8 +58,8 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else{
                             last_result = results;
-                            callback(null);
                     }
+                    callback(null);
                 });
             },
             function(callback){
@@ -69,8 +69,9 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else{
                             sub_last_result = results;
-                            callback(null);
+
                     }
+                    callback(null);
                 });
             },
             function(callback){
@@ -180,7 +181,6 @@ const  GetThisWorkSheet = (req, res) => {
 
         let this_work, sub_this_work;
 
-
         async.waterfall([
             function(callback) {
                 db.query(this_sql_str, [req.session.userid], (error, results) => {
@@ -192,7 +192,6 @@ const  GetThisWorkSheet = (req, res) => {
                         callback(null);
                     }
                 });
-        
             },
             function(callback) {
                 db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
@@ -206,11 +205,13 @@ const  GetThisWorkSheet = (req, res) => {
                 });
             },
             function(callback) {
+                console.log(this_work);
+                console.log(sub_this_work);
                 res.end(ejs.render(htmlStream, {
-                    'title'     :'업무관리 프로그램',
-                    'url'       :'../../',
-                    thisWork    :this_work,
-                    sub_thisWork:sub_this_work
+                    'title'         :'업무관리 프로그램',
+                    'url'           :'../../',
+                    thisWork        :this_work,
+                    sub_thisWork    :sub_this_work
                  })); 
                 callback(null);
             }
@@ -369,17 +370,20 @@ const  GetFutureWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                            futureWork = results;
+                           callback(null);
                     }
                 });
+            },
+            function(callback){
                 db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
                     } else {
                         sub_futureWork =  results;
+                        callback(null);
                     }
                 });
-                callback(null);
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {

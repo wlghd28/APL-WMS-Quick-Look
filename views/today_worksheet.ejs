@@ -1,12 +1,14 @@
 <div id="today-worksheet-container" class="container">
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-20">
             <div class="container">
                 <h2>금주 업무 일지</h2>
-                <form role="form" method="POST" action="/userwork/upload_this_worksheet">
-                    <textarea id="this-main-textarea" name="work" class="form-control" placeholder="주업무를 입력해주세요!"><%=thisWork[0].work%></textarea>
-                    <textarea id="this-sub-textarea" name="sub_work" class="form-control" placeholder="부업무를 입력해주세요!"><%=thisWork[0].work%></textarea>
-                    <input type="submit" class="btn btn-primary btn-block" value="저장하기">
+                <form role="form" method="POST" action="/userwork/upload_this_worksheet" style="width: 100%;">
+                    <textarea style="display: inline-block" id="this-main-textarea" name="work" 
+                        class="form-control" placeholder="주업무를 입력해주세요!"><%=thisWork[0].work%></textarea>
+                    <textarea style="display: inline-block" id="this-sub-textarea" name="sub_work" 
+                        class="form-control" placeholder="부업무를 입력해주세요!"><%=sub_thisWork[0].work%></textarea>
+                    <input type="submit" class="btn btn-primary" value="저장하기" style="padding: 5px 100px;">
                 </form>
             </div>   
         </div>
