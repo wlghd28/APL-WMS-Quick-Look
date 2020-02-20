@@ -24,20 +24,24 @@ const DataBackup = (req, res) => {
         let sql_str2 = "INSERT INTO LAST_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
         let sql_str3 = "DELETE FROM THIS_WORK";
 
+        /*
         // 예정된 주업무 데이터를 금주 업무로 업데이트 시키는 과정
         let sql_str4 = "SELECT * FROM FUTUER_WORK";
         let sql_str5 = "INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
         let sql_str6 = "DELETE FROM FUTURE_WORK";
+        */ 
 
         // 금주 부업무 데이터를 지난 업무 데이터로 백업 시키는 과정
         let sql_str7 = "SELECT * FROM SUB_THIS_WORK";
         let sql_str8 = "INSERT INTO SUB_LAST_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
         let sql_str9 = "DELETE FROM SUB_THIS_WORK";
 
+        /*
         // 예정된 부업무 데이터를 금주 업무로 업데이트 시키는 과정
         let sql_str10 = "SELECT * FROM SUB_FUTUER_WORK";
         let sql_str11 = "INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
         let sql_str12 = "DELETE FROM SUB_FUTURE_WORK";
+        */
 
         async.waterfall([
             function(callback) {
@@ -101,6 +105,7 @@ const DataBackup = (req, res) => {
                 });
                 callback(null);
             },
+            /*
             function(callback) {
                 // 예정된 주업무 데이터를 금주 업무로 업데이트 시키는 과정
                 db.query(sql_str4, (error, results) => {
@@ -162,6 +167,7 @@ const DataBackup = (req, res) => {
                 });
                 callback(null);
             }
+            */
         ], function(error, result) {
             if (error)
                 console.log(error);

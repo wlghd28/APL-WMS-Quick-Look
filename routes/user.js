@@ -3,7 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
-const   session     = require('express-session');
+//const   session     = require('express-session');
 const   router      = express.Router();
 const   requestIp   = require('request-ip');
 const   moment      = require('moment');
@@ -170,10 +170,43 @@ const HandleSignup = (req, res) => {
         }
     });
 };
+
+// ID 찾기 페이지를 출력합니다.
+const GetFindIdPage = (req, res) => {
+
+};
+
+// ID 찾기를 처리합니다.
+const HandleFindId = (req, res) => {
+
+};
+
+// Password 찾기 페이지를 출력합니다.
+const GetFindPwdPage = (req, res) => {
+
+};
+
+// Password 변경 페이지를 출력합니다. 
+// Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
+const GetAlterPwdPage = (req, res) => {
+
+};
+
+// Password 변경을 처리합니다.
+const HandleAlterPwd = (req, res) => {
+
+};
+
+
 router.get('/login', GetLoginPage);
 router.get('/logout', HandleLogout);
 router.get('/signup', GetSignupPage);
+router.get('/findid', GetFindIdPage);
+router.get('/findpwd', GetFindPwdPage);
 router.post('/login', HandleLogin);
 router.post('/signup', HandleSignup);
+router.post('/findid', HandleFindId);
+router.post('/findpwd',  GetAlterPwdPage);
+router.put('/alterpwd', HandleAlterPwd);
 
 module.exports = router
