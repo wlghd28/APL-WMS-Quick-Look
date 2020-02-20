@@ -1,0 +1,33 @@
+<div class="simple-login-container">
+
+    <!-- method는 테스트용으로 get으로 처리함, 나중에 post로 바꿔야함 -->
+    <form accept-charset="UTF-8" role="form" method="POST" action="/user/login">
+        <h2 style="margin: 170px 0 20px 0">Login Form</h2>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <input type="text" name="uid" class="form-control" placeholder="UserId">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <input type="password" name="pass" placeholder="Password" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <a href="/user/signup" class="btn btn-block btn-login">회원가입</a>
+            </div>
+            <div class="col-md-6 form-group">
+                <input type="submit" class="btn btn-block btn-login" value="로그인">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group find-link">
+                <a href="#">아이디 찾기</a>
+            </div>
+            <div class="col-md-6 form-group find-link">
+                <a href="#" >비밀번호 찾기</a>
+            </div>
+        </div>
+    </form>
+</div>

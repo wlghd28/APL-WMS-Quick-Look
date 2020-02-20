@@ -1,0 +1,227 @@
+[33mcommit 7a3b94d4fbdfd0dfa64d9b23578d1f3c60472be6[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Tue Feb 18 10:17:39 2020 +0900
+
+    pull하기 전 커밋
+
+[33mcommit 744688b9296ebe5bbcfaf739c3c859babf2dcbf3[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Tue Feb 18 09:58:19 2020 +0900
+
+    신경안써도 되는 커밋
+
+[33mcommit 4b7854a0571cfe4f7eefb587ea2e108045091722[m[33m ([m[1;32mwlghd28-master[m[33m)[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Tue Feb 18 09:38:56 2020 +0900
+
+    PR 충돌나서 user.js 일부분 삭제
+
+[33mcommit 6dbfd1b81ae7564928178f0f1143c82a3058c99c[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Tue Feb 18 09:37:10 2020 +0900
+
+    PR 충돌나서 user.js 일부분 삭제
+
+[33mcommit 6a99673373df0048d13fceac651ce349a6c776c2[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Mon Feb 17 23:19:32 2020 +0900
+
+    버튼 색상들 수정
+
+[33mcommit 3fcfdb82f0dc19819830987c7cee67522c91a666[m
+Merge: ca9785a bd2c55b
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Mon Feb 17 23:02:03 2020 +0900
+
+    하루종일 삽질한거 이유는 모르겠지만 해결됨
+
+[33mcommit ca9785a16c0e087fdd659d7d069ffd23cb4f7253[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Mon Feb 17 16:04:27 2020 +0900
+
+    디자인 수정 및 today_worksheet.ejs 파일 수정
+
+[33mcommit bd2c55bbefe198d80d4468061fbabbc6ef9bc5c2[m
+Merge: 5f11df6 1c89558
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Mon Feb 17 16:03:35 2020 +0900
+
+    Merge pull request #5 from wlghd28/master
+    
+    로그인 및 회원가입 기능 구현
+
+[33mcommit 1c89558a4e439840fc5ba737c6275103f181a43a[m
+Merge: 8f63441 5f11df6
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Mon Feb 17 16:02:14 2020 +0900
+
+    로그인 및 회원가입 기능 구현
+
+[33mcommit 8f63441cebee211e5ab936f058646fd7e9962854[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Mon Feb 17 10:34:29 2020 +0900
+
+    update
+
+[33mcommit 5f11df6d2294fea7879088ea67260dc3a8626c55[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Mon Feb 17 10:23:12 2020 +0900
+
+    버튼 디자인 수정 및 회원가입 폼 추가
+
+[33mcommit 1d2b6b1bd6066d8e4ef0715a3d91c020e8dc5d9b[m
+Merge: 7aafcec ea38d3d
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Sun Feb 16 17:18:47 2020 +0900
+
+    Merge branch 'master' of https://github.com/cbw1030/APL-BMS
+
+[33mcommit 7aafcec9623828848b2d350ad0ca2bd4eb179043[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Sun Feb 16 17:13:59 2020 +0900
+
+    주석수정, css 수정, login.ejs 폼 약간 수정
+
+[33mcommit ea38d3d1b8c59c8920c7a4c73b54989b0d18941c[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 17:18:11 2020 +0900
+
+    Update README.md
+
+[33mcommit 72f5c7ae9c7613a7e9579ba71f7902b57c7ebe9f[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 17:18:00 2020 +0900
+
+    Update README.md
+
+[33mcommit 0e84fc7623413cbea9e0ba8acbcef7f2ae624b4e[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 17:17:33 2020 +0900
+
+    Update README.md
+
+[33mcommit dcf384e37bf373c0638e50f0724a7f8856690f54[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 17:17:19 2020 +0900
+
+    Update README.md
+
+[33mcommit 983bf2b33ca686bba6a16ce7bf0106390cc59537[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 17:17:09 2020 +0900
+
+    Update README.md
+
+[33mcommit 5e22555be9f3ebf23a3872bdf5c356141b5c5960[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Fri Feb 14 17:14:11 2020 +0900
+
+    로그인화면 구성 및 라우팅 처리
+
+[33mcommit 37cba42ab44a9f4b191ca83add3f4d98c7c176ef[m
+Merge: bf85068 f1ad8d7
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 16:15:17 2020 +0900
+
+    Merge pull request #4 from wlghd28/master
+    
+    기능모듈들 및 REST API 추가
+
+[33mcommit f1ad8d78a26b48ae0b8f077222ef9a950f125f1f[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 16:12:51 2020 +0900
+
+    모듈이름 및 REST API 지정
+
+[33mcommit 3ad5faa572c659b156414a41fa70ee505adb47e9[m
+Merge: e742428 bf85068
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 15:26:02 2020 +0900
+
+    update
+
+[33mcommit bf850682045a80f9e0c7f6ce1e00b47994d033a7[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Fri Feb 14 15:24:21 2020 +0900
+
+    금일 업무일지, 예정 업무일지 워크시트 디자인 수정
+
+[33mcommit e74242801495e205afbdfcc27b1673ebfc7c8e52[m
+Merge: 1274e9e f1e5e94
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 14:08:52 2020 +0900
+
+    Merge branch 'master' of https://github.com/cbw1030/APL-BMS
+
+[33mcommit f1e5e948ee90c51316a278dfb9434e5b88ed0945[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Fri Feb 14 14:08:19 2020 +0900
+
+    지홍 깃헙 테스트
+
+[33mcommit 1274e9e444627bf8c7629cadafcd322ecd2821cf[m
+Merge: bb04c94 774f085
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 14:04:30 2020 +0900
+
+    test
+
+[33mcommit 774f08559b427d8aa35691289e0af464a73595a0[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Fri Feb 14 12:20:08 2020 +0900
+
+    routes 폴더 내 js파일 모듈화, 예정 업무일지 워크시트 추가
+
+[33mcommit e9d96e31f9cf6b27a69b692d7ce55405d395e735[m
+Merge: a6704ba 42adab5
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 11:15:04 2020 +0900
+
+    Merge pull request #3 from wlghd28/jihong
+    
+    css 링크 해결
+
+[33mcommit 42adab5da64513c143384e470785d126a3b95bd7[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 11:13:16 2020 +0900
+
+    css 링크 해결
+
+[33mcommit bb04c944829e021591c1ef6b726c405480d4d919[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 11:09:05 2020 +0900
+
+    css link 해결!
+
+[33mcommit 22093062db098de769705d4552d66742d8111a1b[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 11:04:01 2020 +0900
+
+    css link 해결
+
+[33mcommit a6704ba601a1782e6b6274fdccee8350fa29b3d3[m
+Merge: 69054fb 6b0859c
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Fri Feb 14 10:45:51 2020 +0900
+
+    Merge pull request #2 from wlghd28/jihong
+    
+    css link 해결
+
+[33mcommit 6b0859c74410a00e415778e8603cd3bb9c4e5583[m
+Author: wlghd28 <hojindohong@nate.com>
+Date:   Fri Feb 14 10:41:46 2020 +0900
+
+    css link 해결
+
+[33mcommit 69054fba15570624f9b6dc0e1dbafa587cdbb0a0[m[33m ([m[1;32mjaehee[m[33m)[m
+Author: ChoJaeHee <cbw1030@naver.com>
+Date:   Thu Feb 13 16:57:57 2020 +0900
+
+    initial commit + 메인UI 및 작업지시서 구현
+
+[33mcommit f6155d2be5c9d5d13de07f6e47fedd0a9048e4e2[m
+Author: JaeHee Cho <40957996+cbw1030@users.noreply.github.com>
+Date:   Wed Feb 12 13:37:40 2020 +0900
+
+    Initial commit
