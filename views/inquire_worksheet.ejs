@@ -15,29 +15,19 @@
                         <div class="scroll-td">
                             <% lastWork.forEach(function (last_work, index) { %>
                             <div class="table-bordered">
-                                <span>last_work.start_date ~ last_work.end_date</span><br><br>
-                                <span>last_work.work</span>
+                                <span><%=last_work.start_date %> ~ <%=last_work.end_date %></span><br><br>
+                                <span><%=last_work.work%></span>
                             </div>
                             <% }); %>
                         </div>
                     <td>
                         <div class="scroll-td">
-                            <% thisWork.forEach(function (this_work, index) { %>
-                                <div class="table-bordered">
-                                    <span>this_work.start_date ~ this_work.end_date</span><br><br>
-                                    <span>this_work.work</span>
-                                </div>
-                            <% }); %>
+                            <%=thisWork%>
                         </div>
                     </td>
                     <td>
                         <div class="scroll-td">
-                            <% futureWork.forEach(function (future_work, index) { %>
-                                <div class="table-bordered">
-                                    <span>future_work.start_date ~ future_work.end_date</span><br><br>
-                                    <span>future_work.work</span>
-                                </div>
-                            <% }); %>   
+                            <%=futureWork%>
                         </div>
                     </td>
                 </tr>
@@ -48,30 +38,20 @@
                         <div class="scroll-td">
                             <% sub_lastWork.forEach(function (sub_last_work, index) { %>
                             <div class="table-bordered">
-                                <span>sub_last_work.start_date ~ sub_last_work.end_date</span><br><br>
-                                <span>sub_last_work.work</span>
+                                <span><%=sub_last_work.start_date%> ~ <%=sub_last_work.end_date%></span><br><br>
+                                <span><%=sub_last_work.work%></span>
                             </div>
                             <% }); %>
                         </div>
                     </td>
                     <td>
                         <div class="scroll-td">
-                            <% sub_thisWork.forEach(function (sub_this_work, index) { %>
-                            <div class="table-bordered">
-                                <span>sub_this_work.start_date ~ sub_this_work.end_date</span><br><br>
-                                <span>sub_this_work.work</span>
-                            </div>
-                            <% }); %>
+                            <%=sub_thisWork%>
                         </div>
                     </td>
                     <td>
                         <div class="scroll-td">
-                            <% sub_futureWork.forEach(function (sub_future_work, index) { %>
-                            <div class="table-bordered">
-                                <span>sub_future_work.start_date ~ sub_future_work.end_date</span><br><br>
-                                <span>sub_future_work.work</span>
-                            </div>
-                            <% }); %>
+                            <%=sub_futureWork%>
                         </div>
                     </td>
                 </tr>

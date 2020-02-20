@@ -48,8 +48,7 @@ const GetInquireWorkSheet = (req, res) => {
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
-        let last_result, this_result, future_result;
-        let sub_last_result, sub_this_result, sub_future_result;
+        let last_result, this_result, future_result, sub_last_result, sub_this_result, sub_future_result;
         // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
         async.waterfall([
             function(callback) {
@@ -59,19 +58,23 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else{
                             last_result = results;
+                            callback(null);
                     }
                 });
+            },
+            function(callback){
                 db.query(sub_last_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
                     } else{
                             sub_last_result = results;
+                            callback(null);
                     }
                 });
-                callback(null);
             },
-            function(callback) {
+            function(callback){
+
                 db.query(this_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -82,8 +85,11 @@ const GetInquireWorkSheet = (req, res) => {
                         else {
                             this_result = results[0].work;
                         }
+                        callback(null);
                     }
                 });
+            },
+            function(callback){
                 db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -94,11 +100,11 @@ const GetInquireWorkSheet = (req, res) => {
                         else {
                             sub_this_result = results[0].work;
                         }
+                        callback(null);
                     }
                 });
-                callback(null);
             },
-            function(callback) {
+            function(callback){
                 db.query(future_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -109,10 +115,12 @@ const GetInquireWorkSheet = (req, res) => {
                         else {
                             future_result = results[0].work;
                         }
+                        callback(null);
                     }
-                    console.log(last_result);
                    
                 });
+            },
+            function(callback){
                 db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -123,9 +131,9 @@ const GetInquireWorkSheet = (req, res) => {
                         else {
                             sub_future_result = results[0].work;
                         }
+                        callback(null);
                     }
                 });
-                callback(null);
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
@@ -140,7 +148,7 @@ const GetInquireWorkSheet = (req, res) => {
                 }));
                 callback(null);
             }
-        ], function(error, result) {
+        ], function(error, results) {
             if (error)
                 console.log(error);
         }); 
@@ -161,9 +169,9 @@ const  GetThisWorkSheet = (req, res) => {
     
     // 로그인에 성공했을 경우에만 업무 등록을 할 수 있음
     if (req.session.userid) {
-        let this_sql_str     = "SELECT * FROM THIS_WORK WHERE user_id = ?";
-        let sub_this_sql_str = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
-        let htmlStream  = '';
+        let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id = ?";
+        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
+        let htmlStream          = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
         htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
@@ -181,9 +189,10 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         this_work = results;
+                        callback(null);
                     }
                 });
-                callback(null);
+        
             },
             function(callback) {
                 db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
@@ -191,10 +200,10 @@ const  GetThisWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {    
-                        sub_this_work = results;            
+                        sub_this_work = results;   
+                        callback(null);         
                     }
                 });
-                callback(null);
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
