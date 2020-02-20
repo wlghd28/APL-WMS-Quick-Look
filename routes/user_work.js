@@ -75,7 +75,6 @@ const GetInquireWorkSheet = (req, res) => {
                 });
             },
             function(callback){
-
                 db.query(this_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -172,6 +171,7 @@ const  GetThisWorkSheet = (req, res) => {
     if (req.session.userid) {
         let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id = ?";
         let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
+
         let htmlStream          = '';
     
         htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
@@ -205,8 +205,6 @@ const  GetThisWorkSheet = (req, res) => {
                 });
             },
             function(callback) {
-                console.log(this_work);
-                console.log(sub_this_work);
                 res.end(ejs.render(htmlStream, {
                     'title'         :'업무관리 프로그램',
                     'url'           :'../../',
@@ -293,12 +291,14 @@ const HandleThisWorkSheet = (req, res) => {
                         }              
                     }
                 });
+                callback(null);
+            },
+            function(callback){
                 db.query(sub_sql_str1, [userid], (error, results) => {
                     if (error) {     
                         console.log(error);
                         res.end("error");
-                    } else {
-        
+                    } else {     
                         // 금주 부업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
                             db.query(sub_sql_str2, [start_date, end_date, userid, sub_work], (error) => {
@@ -370,8 +370,8 @@ const  GetFutureWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                            futureWork = results;
-                           callback(null);
                     }
+                    callback(null);
                 });
             },
             function(callback){
@@ -381,8 +381,8 @@ const  GetFutureWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         sub_futureWork =  results;
-                        callback(null);
                     }
+                    callback(null);
                 });
             },
             function(callback) {
@@ -419,9 +419,9 @@ const HandleFutureWorkSheet = (req, res) => {
         let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
         let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
 
-        let sub_sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
-        let sub_sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
-        let sub_sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
+        let sub_sql_str1 = 'SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?';
+        let sub_sql_str2 = 'INSERT INTO SUB_FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sub_sql_str3 = 'UPDATE SUB_FUTURE_WORK SET work = ? WHERE user_id = ?';
         
         
         let body = req.body;
@@ -449,7 +449,6 @@ const HandleFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-
                         // 예정된 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
                             db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
@@ -469,9 +468,12 @@ const HandleFutureWorkSheet = (req, res) => {
                                     console.log('update set DB was completed!');                                  
                                 }
                             }); // db.query();
-                        }              
+                        }    
+                        callback(null);          
                     }
                 });
+            },
+            function(callback){
                 // 예정된 부업무 등록이 되어있는지 조사합니다.
                 db.query(sub_sql_str1, [userid], (error, results) => {
                     if (error) {     
@@ -498,10 +500,10 @@ const HandleFutureWorkSheet = (req, res) => {
                                     console.log('update set DB was completed!');
                                 }
                             }); // db.query();
-                        }              
+                        }  
+                        callback(null);            
                     }
                 });
-                callback(null);
             },
             function(callback) {
                 res.redirect('/userwork/inquire_worksheet');
