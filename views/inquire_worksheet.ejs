@@ -1,62 +1,48 @@
-<!DOCTYPE html>
 <section id="inquire-worksheet-container" class="container">
-    <div class="table table-bordered">
-        <table id="inquire-table" class="tabler">
-            <tbody>
+    <div class="table table-bordered table-responsive">
+        <table id="inquire-table">
+            <tbody class="table">
                 <tr class="table-warning">
-                    <th width="30"></th>
-                    <th width=470>지난업무</th>
-                    <th width=470>금주업무</th>
-                    <th width=470>예정된 업무</th>
+                    <th width="3%"></th>
+                    <th width="700px">지난업무</th>
+                    <th width="700px">금주업무</th>
+                    <th width="700px">예정된 업무</th>
                 </tr>
                 <tr>
-                    <td height="280">주업무</td>
+                    <th height="280" class="table-warning">주업무</th>
                     <td>
-                        <div class="scroll-td">
-                            <% lastWork.forEach(function (last_work, index) { %>
-                            <div class="table-bordered">
-                                <span><%=last_work.start_date %> ~ <%=last_work.end_date %></span><br><br>
-                                <span><%=last_work.work%></span>
-                            </div>
-                            <% }); %>
+                        <% lastWork.forEach(function (last_work, index) { %>
+                        <div class="table-bordered">
+                            <span><%=last_work.start_date %> ~ <%=last_work.end_date %></span><br><br>
+                            <span><%=last_work.work%></span>
                         </div>
+                        <% }); %>
                     <td>
-                        <div class="scroll-td">
-                            <textarea class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=thisWork%></textarea>
-                        </div>
+                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=thisWork%></textarea>
                     </td>
                     <td>
-                        <div class="scroll-td">
-                            <textarea class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=futureWork%></textarea>
-                        </div>
+                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=futureWork%></textarea>
                     </td>
                 </tr>
-                
+
                 <tr>
-                    <td height="280">부업무</td>
+                    <th height="280" class="table-warning">부업무</th>
                     <td>
-                        <div class="scroll-td">
-                            <% sub_lastWork.forEach(function (sub_last_work, index) { %>
-                            <div class="table-bordered">
-                                <span><%=sub_last_work.start_date%> ~ <%=sub_last_work.end_date%></span><br><br>
-                                <span><%=sub_last_work.work%></span>
-                            </div>
-                            <% }); %>
+                        <% sub_lastWork.forEach(function (sub_last_work, index) { %>
+                        <div class="table-bordered">
+                            <span><%=sub_last_work.start_date%> ~ <%=sub_last_work.end_date%></span><br><br>
+                            <span><%=sub_last_work.work%></span>
                         </div>
+                        <% }); %>
                     </td>
                     <td>
-                        <div class="scroll-td">
-                            <textarea class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_thisWork%></textarea>
-                        </div>
+                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_thisWork%></textarea>
                     </td>
                     <td>
-                        <div class="scroll-td">
-                            <textarea class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_futureWork%></textarea>
-                        </div>
+                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_futureWork%></textarea>
                     </td>
                 </tr>
             </tbody>
-            
         </table>
     </div>
 </section>
