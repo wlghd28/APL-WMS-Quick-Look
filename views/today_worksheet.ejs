@@ -4,21 +4,11 @@
             <div class="container">
                 <h2>금주 업무 일지</h2>
                 <form role="form" method="POST" action="/userwork/upload_this_worksheet" style="width: 100%;">
-                    <% var thiswork, sub_thiswork; %>
-                    <% if (thisWork == null) { %>
-                    <%      thiswork = '없음'; %>
-                    <% } else { %>
-                    <%      thiswork = thisWork[0].work; %>
-                    <% } %>
-                    <% if (sub_thisWork == null) { %>
-                    <%      sub_thiswork = '없음'; %>
-                    <% } else { %>
-                    <%      sub_thiswork = sub_thisWork[0].work; %>
-                    <% } %>
+                    
                     <textarea style="display: inline-block" id="this-main-textarea" name="work" 
-                        class="form-control" placeholder="주업무를 입력해주세요!"><%=thiswork%></textarea>
+                        class="form-control" placeholder="주업무를 입력해주세요!"><%=thisWork%></textarea>
                     <textarea style="display: inline-block" id="this-sub-textarea" name="sub_work" 
-                        class="form-control" placeholder="부업무를 입력해주세요!"><%=sub_thiswork%></textarea>
+                        class="form-control" placeholder="부업무를 입력해주세요!"><%=sub_thisWork%></textarea>
                     <input type="submit" class="btn btn-primary" value="저장하기" style="padding: 5px 100px;">
                 </form>
             </div>   

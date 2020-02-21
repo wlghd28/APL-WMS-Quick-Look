@@ -188,7 +188,12 @@ const  GetThisWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        this_work = results;
+                        if(results.length <= 0){
+                            this_work = null;
+                        }
+                        else{
+                            this_work = results[0].work;
+                        }
                         callback(null);
                     }
                 });
@@ -199,7 +204,12 @@ const  GetThisWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {    
-                        sub_this_work = results;   
+                        if(results.length <= 0){
+                            sub_this_work = null;
+                        }
+                        else{
+                            sub_this_work = results[0].work;
+                        }
                         callback(null);         
                     }
                 });
@@ -369,7 +379,11 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                           futureWork = results;
+                        if(results.length <= 0){
+                            futureWork = null;
+                        } else {
+                            futureWork = results[0].work;
+                        }
                     }
                     callback(null);
                 });
@@ -380,7 +394,11 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        sub_futureWork =  results;
+                        if(results.length <= 0){
+                            sub_futureWork = null;
+                        } else {
+                            sub_futureWork = results[0].work;
+                        }
                     }
                     callback(null);
                 });
