@@ -4,10 +4,21 @@
             <div class="container">
                 <h2>예정 업무 일지</h2>
                 <form role="form" method="POST" action="/userwork/upload_future_worksheet" style="width: 100%;">
+                    <% var futurework, sub_futurework; %>
+                    <% if (futureWork == null) { %>
+                    <%      futurework = '없음'; %>
+                    <% } else { %>
+                    <%      futurework = futureWork[0].work; %>
+                    <% } %>
+                    <% if (sub_futureWork == null) { %>
+                    <%      sub_futurework = '없음'; %>
+                    <% } else { %>
+                    <%      sub_futurework = sub_futureWork[0].work; %>
+                    <% } %>
                     <textarea style="display: inline-block" id="future-main-textarea" name="work" 
-                        class="form-control" placeholder="예정된 주업무를 입력하세요"><%=futureWork[0].work%></textarea>
+                        class="form-control" placeholder="예정된 주업무를 입력하세요"><%=futurework%></textarea>
                     <textarea style="display: inline-block" id="future-sub-textarea" name="sub_work" 
-                        class="form-control" placeholder="예정된 부업무를 입력하세요"><%=sub_futureWork[0].work%></textarea>
+                        class="form-control" placeholder="예정된 부업무를 입력하세요"><%=sub_futurework%></textarea>
                     <input type="submit" class="btn btn-primary " value="저장하기" style="padding: 5px 100px;">
                 </form>
             </div>   
