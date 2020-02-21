@@ -137,14 +137,14 @@ const GetInquireWorkSheet = (req, res) => {
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
-                    'title'         :'업무관리 프로그램',
-                    'url'           :'../../',
-                    lastWork        :last_result,
-                    'thisWork'      :this_result,
-                    'futureWork'    :future_result,
-                    sub_lastWork    :sub_last_result,
-                    'sub_thisWork'  :sub_this_result,
-                    'sub_futureWork':sub_future_result,
+                                                'title'         :'업무관리 프로그램',
+                                                'url'           :'../../',
+                                                lastWork        :last_result,
+                                                'thisWork'      :this_result,
+                                                'futureWork'    :future_result,
+                                                sub_lastWork    :sub_last_result,
+                                                'sub_thisWork'  :sub_this_result,
+                                                'sub_futureWork':sub_future_result,
                 }));
                 callback(null);
             }
@@ -158,7 +158,7 @@ const GetInquireWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
     }
 };
 
@@ -233,7 +233,7 @@ const  GetThisWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
     }
 };
 
@@ -350,7 +350,7 @@ const HandleThisWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));   
     }
 };
 
@@ -405,10 +405,10 @@ const  GetFutureWorkSheet = (req, res) => {
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
-                    'title'         :'업무관리 프로그램',
-                    'url'           :'../../',
-                    futureWork      :futureWork,
-                    sub_futureWork  :sub_futureWork
+                                                'title'         :'업무관리 프로그램',
+                                                'url'           :'../../',
+                                                futureWork      :futureWork,
+                                                sub_futureWork  :sub_futureWork
                  })); 
                 callback(null);
             }
@@ -422,7 +422,9 @@ const  GetFutureWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
     }
 };
 
@@ -537,7 +539,9 @@ const HandleFutureWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
     }
 };
 

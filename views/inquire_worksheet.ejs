@@ -9,37 +9,45 @@
                     <th width="700px">예정된 업무</th>
                 </tr>
                 <tr>
-                    <th height="280" class="table-warning">주업무</th>
+                    <th height="360" class="table-warning">주업무</th>
                     <td>
-                        <% lastWork.forEach(function (last_work, index) { %>
-                        <div class="table-bordered">
-                            <span><%=last_work.start_date %> ~ <%=last_work.end_date %></span><br><br>
-                            <span><%=last_work.work%></span>
-                        </div>
-                        <% }); %>
+                        <textarea rows="13" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled>
+<% lastWork.forEach(function (last_work, index) { %>
+날짜 : <%=last_work.start_date %> ~ <%=last_work.end_date %>
+                            
+업무 : 
+<%=last_work.work%>
+
+--------------------------------------------------------------
+<% }); %>
+                        </textarea>
                     <td>
-                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=thisWork%></textarea>
+                        <textarea rows="13" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=thisWork%></textarea>
                     </td>
                     <td>
-                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=futureWork%></textarea>
+                        <textarea rows="13" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=futureWork%></textarea>
                     </td>
                 </tr>
 
                 <tr>
-                    <th height="280" class="table-warning">부업무</th>
+                    <th height="200" class="table-warning">부업무</th>
                     <td>
-                        <% sub_lastWork.forEach(function (sub_last_work, index) { %>
-                        <div class="table-bordered">
-                            <span><%=sub_last_work.start_date%> ~ <%=sub_last_work.end_date%></span><br><br>
-                            <span><%=sub_last_work.work%></span>
-                        </div>
-                        <% }); %>
+                        <textarea rows="7" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled>
+<% sub_lastWork.forEach(function (sub_last_work, index) { %>
+날짜 : <%=sub_last_work.start_date %> ~ <%=sub_last_work.end_date %>
+                            
+업무 : 
+<%=sub_last_work.work%>
+
+--------------------------------------------------------------
+<% }); %>
+                        </textarea>
                     </td>
                     <td>
-                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_thisWork%></textarea>
+                        <textarea rows="7" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_thisWork%></textarea>
                     </td>
                     <td>
-                        <textarea rows="10" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_futureWork%></textarea>
+                        <textarea rows="7" class="form-control common-work-textarea" placeholder="등록된 업무가 없습니다!" disabled><%=sub_futureWork%></textarea>
                     </td>
                 </tr>
             </tbody>

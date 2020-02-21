@@ -12,9 +12,8 @@ const  GetMainUI = (req, res) => {
     htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/main.ejs','utf8'); // Content
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {
-                                        'title' : '업무관리 프로그램',
-                                        'url' : '../' })); 
+    res.end(ejs.render(htmlStream, {'title' : '업무관리 프로그램',
+                                    'url' : '../' })); 
 };
 
 router.get('/', GetMainUI);

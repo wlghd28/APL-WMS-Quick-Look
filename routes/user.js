@@ -28,15 +28,15 @@ const db = mysql.createConnection({
     회원 로그인 화면을 출력합니다.
 */
 const GetLoginPage = (req, res) => {
-    let htmlStream = ''; 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  // 초기설정(부트스트랩/제이쿼리 등)
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); // Content
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  // Footer
+    let loginHtmlStream = ''; 
+    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); 
+    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {
-                                    'title' : '로그인',
-                                    'url' : '../../' })); 
+    res.end(ejs.render(loginHtmlStream, {
+                                        'title' : '로그인',
+                                        'url' : '../../' })); 
 };
 
 /*
@@ -47,29 +47,33 @@ const HandleLogin = (req, res) => {
     let userid, userpass, username;
     let sql_str, sql_str2;
     let ip_address;
-    let htmlStream = '';
+    let errorHtmlStream = '';
     moment.tz.setDefault("Asia/Seoul");
     
-    htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
+    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
 
     console.log('로그인된 아이디 : ', body.uid);
     console.log('로그인된 패스워드 : ', body.pass);
   
     if (body.uid == '' || body.pass == '') {
-        console.log("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
-        res.status(562).end(ejs.render(htmlStream));
+        alert("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
     } else {
         sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
         sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(?, ?, ?, ?)";
         
         db.query(sql_str, (error, results, fields) => {
             if (error) 
-                res.status(562).end("Login Fail as No id in DB!"); 
+            res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
             else {
                 if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
-                    res.status(562).end(ejs.render(htmlStream));
+                    res.status(562).end(ejs.render(errorHtmlStream, {
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'url'   : '../../'}));  
                 } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
                     console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함
@@ -122,15 +126,16 @@ const HandleLogout = (req, res) => {
     회원가입 페이지를 출력합니다.
 */
 const GetSignupPage = (req, res) => {
-    let htmlStream = ''; 
+    let signUpHtmlStream = ''; 
 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
-    htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
+    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(htmlStream, {'title' : '회원가입',
-                                    'url'   : '../' }));
+    res.end(ejs.render(signUpHtmlStream, {
+                                            'title' : '회원가입',
+                                            'url'   : '../' }));
 };
 
 /*
@@ -173,7 +178,16 @@ const HandleSignup = (req, res) => {
 
 // ID 찾기 페이지를 출력합니다.
 const GetFindIdPage = (req, res) => {
+    let findIdHtmlStream = ''; 
 
+    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/find_id.ejs','utf8'); 
+    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+    res.end(ejs.render(findIdHtmlStream, {
+                                            'title' : '회원가입',
+                                            'url'   : '../' }));
 };
 
 // ID 찾기를 처리합니다.
@@ -183,7 +197,16 @@ const HandleFindId = (req, res) => {
 
 // Password 찾기 페이지를 출력합니다.
 const GetFindPwdPage = (req, res) => {
+    let findPwdHtmlStream = ''; 
 
+    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/find_pwd.ejs','utf8'); 
+    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+    res.end(ejs.render(findPwdHtmlStream, {
+                                            'title' : '회원가입',
+                                            'url'   : '../' }));
 };
 
 // Password 변경 페이지를 출력합니다. 
@@ -198,15 +221,15 @@ const HandleAlterPwd = (req, res) => {
 };
 
 
-router.get('/login', GetLoginPage);
-router.get('/logout', HandleLogout);
-router.get('/signup', GetSignupPage);
-router.get('/findid', GetFindIdPage);
-router.get('/findpwd', GetFindPwdPage);
-router.post('/login', HandleLogin);
-router.post('/signup', HandleSignup);
-router.post('/findid', HandleFindId);
-router.post('/findpwd',  GetAlterPwdPage);
+router.get('/login',    GetLoginPage);
+router.get('/logout',   HandleLogout);
+router.get('/signup',   GetSignupPage);
+router.get('/findid',   GetFindIdPage);
+router.get('/findpwd',  GetFindPwdPage);
+router.post('/login',   HandleLogin);
+router.post('/signup',  HandleSignup);
+router.post('/findid',  HandleFindId);
+router.post('/findpwd', GetAlterPwdPage);
 router.put('/alterpwd', HandleAlterPwd);
 
 module.exports = router

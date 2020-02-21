@@ -50,6 +50,7 @@ a:hover { text-decoration: none; }
 .find-link > a { text-decoration: none; }
 
 /* signup.ejs */
+#signup-container { width: 600px; } 
 #signup-btn { background-color: #639DDC; border: 1px solid #639DDC; }
 #signup-btn:hover { background-color: #3C89DB; }
 
