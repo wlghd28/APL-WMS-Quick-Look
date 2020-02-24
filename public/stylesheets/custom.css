@@ -94,8 +94,8 @@ a:hover { text-decoration: none; }
 }
 
 /* search_bar.ejs */
+#search-bar-container { margin-top: 100px; }
 .form-control-borderless { border: none; }
-
 .form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
-    border: none; outline: none; box-shadow: none; 
+    border: none; outline: none; box-shadow: none;
 }

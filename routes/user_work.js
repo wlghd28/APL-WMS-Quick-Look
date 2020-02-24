@@ -549,15 +549,15 @@ const HandleFutureWorkSheet = (req, res) => {
     키워드 검색 페이지를 출력합니다.
 */
 const GetSearchPage = (req, res) => {
-    let searchBarHtmlStream = ''; 
+    let searchResultHtmlStream = ''; 
 
-    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
-    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
+    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(searchBarHtmlStream, {
-                                            'title' : '키워드 검색',
+    res.end(ejs.render(searchResultHtmlStream, {
+                                            'title' : '키워드 검색결과',
                                             'url'   : '../' }));
 };
 
@@ -575,8 +575,6 @@ router.get('/search', GetSearchPage);
 router.get('/result', HandleSearch);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
-router.get('/search', GetSearchPage);
-router.get('/result', HandleSearch);
 
 
 module.exports = router
