@@ -81,7 +81,7 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length <= 0)
-                            this_result = '없음';
+                            this_result = null;
                         else {
                             this_result = results[0].work;
                         }
@@ -96,7 +96,7 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length <= 0)
-                            sub_this_result = '없음';
+                            sub_this_result = null;
                         else {
                             sub_this_result = results[0].work;
                         }
@@ -111,7 +111,7 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length <= 0) 
-                            future_result = '없음';
+                            future_result = null;
                         else {
                             future_result = results[0].work;
                         }
@@ -127,7 +127,7 @@ const GetInquireWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length <= 0) 
-                            sub_future_result = '없음';
+                            sub_future_result = null;
                         else {
                             sub_future_result = results[0].work;
                         }
