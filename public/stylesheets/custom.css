@@ -60,7 +60,7 @@ a:hover { text-decoration: none; }
 #findId-btn:hover { background-color: #3C89DB; }
 
 /* find_pwd.ejs */ 
-#findPwd-container { width: 600px; } 
+#findPwd-container { width: 700px; } 
 #findPwd-btn { background-color: #639DDC; border: 1px solid #639DDC; }
 #findPwd-btn:hover { background-color: #3C89DB; }
 

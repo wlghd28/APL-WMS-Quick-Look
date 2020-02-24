@@ -5,14 +5,18 @@
                 <h4 style="margin-top: 50px;">아이디를 찾았습니다</h4>
             </div>
             <div>
-                가입된 아이디 : <span><%=userid%></span>
+                가입된 아이디 : <span style="color: mediumseagreen;"><%=userid%></span>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <a href="/user/login">로그인하기</a> 
+                    <button class="btn btn-warning">
+                        <a href="/user/login">로그인</a> 
+                    </button>
                 </div>
                 <div class="col-md-6">
-                    <a href="#">비밀번호 찾기</a>
+                    <button class="btn btn-warning">
+                        <a href="/user/findpwd">비밀번호 찾기</a> 
+                    </button>
                 </div>
             </div>
     </div>
