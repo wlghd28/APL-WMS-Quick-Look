@@ -320,6 +320,7 @@ const HandleAlterPwd = (req, res) => {
 
     let errorHtmlStream = '';
 
+    console.log(body);
     db.query(sql_str, [password, userid], (error, results) => {
         if (error) {     
             console.log(error);

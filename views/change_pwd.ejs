@@ -1,21 +1,39 @@
+<script>
+    function validate() {
+        let newPass     = $("#new-pass");
+        let newPass2    = $("new-pass2");
+        
+        if (newPass == newPass2) {
+            alert("비밀번호가 정상적으로 변경되었습니다.");
+            return true;
+        } else {
+            alert("비밀번호를 다시 확인해주세요.")
+            return false;
+        }
+    }
+    $(document).ready(function() {
+        bsCustomFileInput.init();
+    });
+</script>
+
 <div id="findId-container" class="container">
     <div class="row d-flex justify-content-center mx-auto">
         <div class="col-md-6 col-xs-12 div-style">
-        <form  accept-charset="UTF-8" role="form" method="POST" action="/user/findid">
+        <form accept-charset="UTF-8" role="form" method="POST" action="/user/alterpwd?_method=PUT">
             <div class="d-flex justify-content-center mx-auto main-label" style="margin: 30px 0 10px 0;">
                 <h4 style="margin-top: 50px;">비밀번호 변경</h4>
             </div>
             <div class="form-group">
-                <input type="text" name="uid" class="form-control text-box" value="<%=userid%>" disabled>
+                <input type="hidden" name="uid" class="form-control text-box" value="<%=userid%>">
             </div>
             <div class="form-group">
-                <input type="password" name="pass" class="form-control text-box" placeholder="새로운 비밀번호를 입력해주세요">
+                <input type="password" id="new-pass" name="pass" class="form-control text-box" placeholder="새로운 비밀번호를 입력해주세요">
             </div>
             <div class="form-group">
-                <input type="password" name="pass2" class="form-control text-box" placeholder="새로운 비밀번호를 입력해주세요">
+                <input type="password" id="new-pass2" name="pass2" class="form-control text-box" placeholder="비밀번호 확인">
             </div>
             <div class="form-group justify-content-center d-flex">
-                <button type="submit" id="findId-btn" class="btn btn-danger button-submit btn-block">확인</button>
+                <button type="submit" id="findId-btn" class="btn btn-danger button-submit btn-block" onsubmit="return validate()">확인</button>
             </div>
         </form> 
     </div>

@@ -14,7 +14,7 @@ a:link { text-decoration: none; }
 a:hover { text-decoration: none; }
 
 /* nav.ejs */
-#nav-container { margin-top: 30px; }
+#nav-container { margin-top: 30px; margin-bottom: 10px; }
 .worksheet-btn { background-color: #639DDC; border: 1px solid #639DDC;}
 .worksheet-btn:hover { background-color: #3C89DB; border: 1px solid #3C89DB;}
 .worksheet-btn > a{ background-color: #639DDC; border: 1px solid #639DDC; color: white;}
@@ -94,8 +94,8 @@ a:hover { text-decoration: none; }
 }
 
 /* search_bar.ejs */
+#search-bar-container { margin-top: 100px; }
 .form-control-borderless { border: none; }
-
 .form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
-    border: none; outline: none; box-shadow: none; 
+    border: none; outline: none; box-shadow: none;
 }
