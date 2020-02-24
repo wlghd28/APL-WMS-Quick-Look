@@ -176,7 +176,9 @@ const HandleSignup = (req, res) => {
     });
 };
 
-// ID 찾기 페이지를 출력합니다.
+/*
+    ID 찾기 페이지를 출력합니다.
+*/
 const GetFindIdPage = (req, res) => {
     let findIdHtmlStream = ''; 
 
@@ -190,12 +192,16 @@ const GetFindIdPage = (req, res) => {
                                             'url'   : '../' }));
 };
 
-// ID 찾기를 처리합니다.
+/*
+    ID 찾기를 처리합니다.
+*/
 const HandleFindId = (req, res) => {
 
 };
 
-// Password 찾기 페이지를 출력합니다.
+/*
+    Password 찾기 페이지를 출력합니다.
+*/
 const GetFindPwdPage = (req, res) => {
     let findPwdHtmlStream = ''; 
 
@@ -209,13 +215,17 @@ const GetFindPwdPage = (req, res) => {
                                             'url'   : '../' }));
 };
 
-// Password 변경 페이지를 출력합니다. 
+/*
+    Password 변경 페이지를 출력합니다. 
+*/
 // Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
 const GetAlterPwdPage = (req, res) => {
 
 };
 
-// Password 변경을 처리합니다.
+/*
+    Password 변경을 처리합니다.
+*/
 const HandleAlterPwd = (req, res) => {
 
 };
