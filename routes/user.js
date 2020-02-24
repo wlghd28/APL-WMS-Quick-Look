@@ -144,12 +144,15 @@ const GetSignupPage = (req, res) => {
 const HandleSignup = (req, res) => {
     console.log('회원가입 요청 보냄');
     let sql_str1            = 'SELECT * FROM USER WHERE user_id = ?';
-    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank) VALUES(?,?,?,?)';
+    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank, phonenum, question, answer) VALUES(?,?,?,?,?,?,?)';
     let body                = req.body;
     let userid              = body.uid;
     let username            = body.uname;
     let password            = body.pass;
     let confirm_password    = body.pass2;
+    let phonenum            = body.phone;
+    let question            = body.question;
+    let answer              = body.answer;
     console.log(req.body);
     console.log('POST 데이터 받음');
 
@@ -160,7 +163,7 @@ const HandleSignup = (req, res) => {
         } else {
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null && password == confirm_password) {
-                db.query(sql_str2, [userid, password, username, 0], (error) => {
+                db.query(sql_str2, [userid, password, username, 0, phonenum, question, answer], (error) => {
                     if (error) {
                         res.end("error");
                         console.log(error);
