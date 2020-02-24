@@ -545,16 +545,6 @@ const HandleFutureWorkSheet = (req, res) => {
     }
 };
 
-<<<<<<< HEAD
-// 키워드 검색 하는 페이지를 출력합니다.
-const GetSearchPage = (req, res) => {
-
-};
-
-// 키워드 검색을 처리합니다.
-const HandleSearch = (req, res) => {
-
-=======
 /* 
     키워드 검색 페이지를 출력합니다.
 */
@@ -576,7 +566,6 @@ const GetSearchPage = (req, res) => {
 */
 const HandleSearch = (req, res) => {
     
->>>>>>> c92e2c56b38998ce06055a8349d5100a80c3eb8b
 };
 
 router.get('/inquire_worksheet', GetInquireWorkSheet);
