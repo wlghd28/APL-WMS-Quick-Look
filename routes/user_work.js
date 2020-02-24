@@ -3,6 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
+const   url = require('url');
 //const   session     = require('express-session');
 const   router      = express.Router();
 const   moment      = require('moment');
@@ -189,7 +190,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if(results.length <= 0){
-                            this_work = null;
+                            this_work = '없음';
                         }
                         else{
                             this_work = results[0].work;
@@ -205,7 +206,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {    
                         if(results.length <= 0){
-                            sub_this_work = null;
+                            sub_this_work = '없음';
                         }
                         else{
                             sub_this_work = results[0].work;
@@ -565,7 +566,7 @@ const GetSearchPage = (req, res) => {
     키워드 검색을 처리합니다.
 */
 const HandleSearch = (req, res) => {
-    
+    const  query = url.parse(req.url, true).query;
 };
 
 router.get('/inquire_worksheet', GetInquireWorkSheet);
