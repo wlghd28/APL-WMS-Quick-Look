@@ -584,8 +584,8 @@ const HandleSearch = (req, res) => {
         let last_results;
         let sub_last_results;
 
-        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE %?%";
-        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE %?%";
+        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work 'LIKE %?%'";
+        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work 'LIKE %?%'";
         // 테스트 코드
         console.log(query);
         async.waterfall([
