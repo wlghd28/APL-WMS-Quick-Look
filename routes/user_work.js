@@ -3,6 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
+const   url = require('url');
 //const   session     = require('express-session');
 const   router      = express.Router();
 const   moment      = require('moment');
@@ -189,7 +190,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if(results.length <= 0){
-                            this_work = null;
+                            this_work = '없음';
                         }
                         else{
                             this_work = results[0].work;
@@ -205,7 +206,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {    
                         if(results.length <= 0){
-                            sub_this_work = null;
+                            sub_this_work = '없음';
                         }
                         else{
                             sub_this_work = results[0].work;
@@ -246,17 +247,17 @@ const HandleThisWorkSheet = (req, res) => {
         console.log('금주 업무 등록 요청보냄');
         // 주업무 등록하는 쿼리문
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
-        let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
         let sql_str3 = 'UPDATE THIS_WORK SET work = ? WHERE user_id = ?';
 
         // 부업무 등록하는 쿼리문
         let sub_sql_str1 = 'SELECT * FROM SUB_THIS_WORK WHERE user_id = ?';
-        let sub_sql_str2 = 'INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sub_sql_str2 = 'INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
         let sub_sql_str3 = 'UPDATE SUB_THIS_WORK SET work = ? WHERE user_id = ?';
 
         let body = req.body;
         let userid = req.session.userid;
-        //let username = req.session.who;
+        let username = req.session.who;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
@@ -281,7 +282,7 @@ const HandleThisWorkSheet = (req, res) => {
                     } else {      
                         // 금주 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
+                            db.query(sql_str2, [start_date, end_date, userid, username, userwork], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
@@ -311,7 +312,7 @@ const HandleThisWorkSheet = (req, res) => {
                     } else {     
                         // 금주 부업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sub_sql_str2, [start_date, end_date, userid, sub_work], (error) => {
+                            db.query(sub_sql_str2, [start_date, end_date, userid, username, sub_work], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
@@ -549,23 +550,98 @@ const HandleFutureWorkSheet = (req, res) => {
     키워드 검색 페이지를 출력합니다.
 */
 const GetSearchPage = (req, res) => {
-    let searchResultHtmlStream = ''; 
+    if(req.session.userid){
+        let searchResultHtmlStream = ''; 
 
-    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
-    searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
+        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(searchResultHtmlStream, {
-                                            'title' : '키워드 검색결과',
-                                            'url'   : '../' }));
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+        res.end(ejs.render(searchResultHtmlStream, {
+                                                'title' : '키워드 검색',
+                                                'url'   : '../' }));
+    } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
+    }
 };
 
 /* 
     키워드 검색을 처리합니다.
 */
 const HandleSearch = (req, res) => {
-    
+
+    if(req.session.userid){
+        const  query = url.parse(req.url, true).query;
+        let search = query.search;
+        let last_results;
+        let sub_last_results;
+
+        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE %?%";
+        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE %?%";
+        // 테스트 코드
+        console.log(query);
+        async.waterfall([
+            function(callback) {
+                db.query(sql_str1, [search], (error, results) => {
+                    if (error) {
+                        res.end("error");
+                        console.log(error);
+                    } else {
+                        last_results = results;
+                        callback(null);
+                    }
+                }); // db.query();
+            },
+            function(callback){
+                db.query(sql_str2, [search], (error, results) => {
+                    if (error) {
+                        res.end("error");
+                        console.log(error);
+                    } else {
+                        sub_last_results = results;
+                        callback(null);
+                    }
+                }); // db.query();
+            },
+            function(callback) {
+                let searchResultHtmlStream = ''; 
+
+                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
+                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render(searchResultHtmlStream, {
+                                                                'title' : '키워드 검색결과',
+                                                                'url'   : '../',
+                                                                lastWork : last_results,
+                                                                sub_lastWork : sub_last_results
+                                                            }));
+                callback(null);
+            }
+        ],  function(error, result) {
+            if (error)
+                console.log(error);
+        });
+        
+    } else {
+        let errorHtmlStream = '';
+        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
+    }
 };
 
 router.get('/inquire_worksheet', GetInquireWorkSheet);
