@@ -202,8 +202,8 @@ const HandleFindId = (req, res) => {
     console.log("ID 찾기 POST 요청 보냄");
     let sql_str = "SELECT user_id FROM USER WHERE phonenum = ? and user_name = ?";
     let body = req.body;
-    let phonenum = body.phonenum;
-    let username = body.username;
+    let phonenum = body.phone;
+    let username = body.uname;
 
     let resultHtmlStream = '';
     let errorHtmlStream = '';
@@ -215,7 +215,7 @@ const HandleFindId = (req, res) => {
         } else {
             // 테스트 코드
             console.log(results);
-            
+
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
                 errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
@@ -226,7 +226,16 @@ const HandleFindId = (req, res) => {
                     'title' : '업무관리 프로그램',
                     'url'   : '../../'})); 
             } else {
-                  
+                resultHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/result_find_id.ejs','utf8'); 
+                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render( resultHtmlStream, {
+                    'title' : '회원가입',
+                    'url'   : '../',
+                    'userid': results[0].user_id
+                    }));
             }              
         }
     });
