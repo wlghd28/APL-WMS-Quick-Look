@@ -8,8 +8,8 @@
 }
 .container { padding-left: 0; padding-right: 0; }
 
-body{ background-color:rgba(255, 255, 255, 0.438); font-size:14px; color:rgb(0, 0, 0); } 
-a{ text-decoration: none; color: black; }
+body { background-color:rgba(255, 255, 255, 0.438); font-size:14px; color:rgb(0, 0, 0); } 
+a { text-decoration: none; color: black; }
 a:link { text-decoration: none; }
 a:hover { text-decoration: none; }
 
@@ -81,4 +81,11 @@ a:hover { text-decoration: none; }
   .notfound .notfound-404 h1 {
     font-size: 120px;
   }
+}
+
+/* search_bar.ejs */
+.form-control-borderless { border: none; }
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none; outline: none; box-shadow: none; 
 }
