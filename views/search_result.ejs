@@ -12,13 +12,23 @@
                     <th width="500px">주업무</th>
                     <th width="500px">부업무</th>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                <% lastWork.forEach(function (last_work, index) { %>
+                    <tr>
+                        <td><%=last_work.start_date%> ~ <%=last_work.end_date%></td>
+                        <td><%=last_work.user_id%></td>
+                        <td><%=last_work.user_name%></td>
+                        <td><%=last_work.work%></td>
+                    </tr>
+                <% }); %>
+
+                <% sub_lastWork.forEach(function (last_work, index) { %>
+                    <tr>
+                        <td><%=last_work.start_date%> ~ <%=last_work.end_date%></td>
+                        <td><%=last_work.user_id%></td>
+                        <td><%=last_work.user_name%></td>
+                        <td><%=last_work.work%></td>
+                    </tr>
+                <% }); %>
             </tbody>
         </table>
     </div>

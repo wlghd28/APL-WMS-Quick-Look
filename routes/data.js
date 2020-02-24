@@ -21,7 +21,7 @@ const DataBackup = (req, res) => {
     cron.schedule('0, 0, 0, *, *, 0', () => {
         // 금주 주업무 데이터를 지난 업무 데이터로 백업 시키는 과정
         let sql_str1 = "SELECT * FROM THIS_WORK";
-        let sql_str2 = "INSERT INTO LAST_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
+        let sql_str2 = "INSERT INTO LAST_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)";
         let sql_str3 = "DELETE FROM THIS_WORK";
 
         /*
@@ -33,7 +33,7 @@ const DataBackup = (req, res) => {
 
         // 금주 부업무 데이터를 지난 업무 데이터로 백업 시키는 과정
         let sql_str7 = "SELECT * FROM SUB_THIS_WORK";
-        let sql_str8 = "INSERT INTO SUB_LAST_WORK(start_date, end_date, user_id, work) VALUES(?, ?, ?, ?)";
+        let sql_str8 = "INSERT INTO SUB_LAST_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)";
         let sql_str9 = "DELETE FROM SUB_THIS_WORK";
 
         /*
@@ -54,7 +54,7 @@ const DataBackup = (req, res) => {
                         if (results.length > 0) {
                             for(var i=0;i<results.length;i++) {
                                 db.query(sql_str2, [results[i].start_date, results[i].end_date, 
-                                    results[i].user_id, results[i].work], (error) => {
+                                    results[i].user_id, results[i].user_name, results[i].work], (error) => {
                                     if (error) {
                                         console.log(error);
                                         res.end("error");
@@ -83,7 +83,7 @@ const DataBackup = (req, res) => {
                         if (results.length > 0) {
                             for(var i=0;i<results.length;i++) {
                                 db.query(sql_str8, [results[i].start_date, results[i].end_date, 
-                                    results[i].user_id, results[i].work], (error) => {
+                                    results[i].user_id, results[i].user_name, results[i].work], (error) => {
                                     if (error) {
                                         console.log(error);
                                         res.end("error");
