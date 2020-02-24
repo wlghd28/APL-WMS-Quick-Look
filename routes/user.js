@@ -158,7 +158,7 @@ const HandleSignup = (req, res) => {
         } else {
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null && password == confirm_password) {
-                db.query(sql_str2, [userid, password, username, 0], (error) => {
+                db.query(sql_str2, [userid, password, username, 0, phonenum, question, answer], (error) => {
                     if (error) {
                         res.end("error");
                         console.log(error);
