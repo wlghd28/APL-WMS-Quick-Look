@@ -19,7 +19,7 @@ const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소
     user:       'root',             // DB접속 아이디
-    password:   'root',             // DB암호
+    password:   'snt3410',             // DB암호
     database:   'work_management'   //사용할 DB명
 });
 
@@ -584,13 +584,13 @@ const HandleSearch = (req, res) => {
         let last_results;
         let sub_last_results;
 
-        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE %?%";
-        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE %?%";
+        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
+        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
         // 테스트 코드
         console.log(query);
         async.waterfall([
             function(callback) {
-                db.query(sql_str1, [search], (error, results) => {
+                db.query(sql_str1, (error, results) => {
                     if (error) {
                         res.end("error");
                         console.log(error);
@@ -601,7 +601,7 @@ const HandleSearch = (req, res) => {
                 }); // db.query();
             },
             function(callback){
-                db.query(sql_str2, [search], (error, results) => {
+                db.query(sql_str2, (error, results) => {
                     if (error) {
                         res.end("error");
                         console.log(error);

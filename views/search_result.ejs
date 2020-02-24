@@ -1,6 +1,13 @@
 <section id="search-result-container" class="container">
     <div class="d-flex justify-content-center mx-auto main-label" style="margin: 20px 0 10px 0;">
-        <h4>검색 결과</h4>
+        <div class="row">
+            <div class="col-sm-8">
+                <h4>검색 결과</h4>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-primary"><a href="/userwork/search"></a> 돌아가기</button>
+            </div>
+        </div>
     </div>
     <div class="table table-bordered table-responsive">
         <table id="inquire-table" style="text-align: center;">
@@ -9,8 +16,7 @@
                     <th width="200px">날짜</th>
                     <th width="100px">아이디</th>
                     <th width="100px">이름</th>
-                    <th width="600px">주업무</th>
-                    <th width="600px">부업무</th>
+                    <th width="1000px">업무 내용(주업무 + 부업무)</th>
                 </tr>
                 <% lastWork.forEach(function (last_work, index) { %>
                     <tr>
