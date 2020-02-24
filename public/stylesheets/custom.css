@@ -54,6 +54,11 @@ a:hover { text-decoration: none; }
 #signup-btn { background-color: #639DDC; border: 1px solid #639DDC; }
 #signup-btn:hover { background-color: #3C89DB; }
 
+/* find_id.ejs */
+#findId-container { width: 600px; } 
+#findId-btn { background-color: #639DDC; border: 1px solid #639DDC; }
+#findId-btn:hover { background-color: #3C89DB; }
+
 /* 404 Error Page */
 #notfound { position: relative; height: 100vh; }
 #notfound .notfound { position: absolute; left: 50%; top: 50%;
