@@ -1,0 +1,152 @@
+﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+-- USER Table Create SQL
+CREATE TABLE USER
+(
+    `user_name`  VARCHAR(45)     NOT NULL, 
+    `user_id`    VARCHAR(45)     NOT NULL, 
+    `user_pwd`   VARCHAR(45)     NOT NULL, 
+    `user_rank`  INT             NULL, 
+    `phonenum`   CHAR(11)        NOT NULL, 
+    `question`   VARCHAR(45)     NOT NULL, 
+    `answer`     VARCHAR(100)    NOT NULL, 
+    PRIMARY KEY (user_id)
+);
+
+
+-- USER Table Create SQL
+CREATE TABLE ADMIN
+(
+    `admin_id`   VARCHAR(45)    NOT NULL, 
+    `admin_pwd`  VARCHAR(45)    NOT NULL, 
+    PRIMARY KEY (admin_id)
+);
+
+
+-- USER Table Create SQL
+CREATE TABLE LAST_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `user_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE LAST_WORK
+    ADD CONSTRAINT FK_LAST_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE THIS_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `user_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE THIS_WORK
+    ADD CONSTRAINT FK_THIS_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE FUTURE_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `user_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE FUTURE_WORK
+    ADD CONSTRAINT FK_FUTURE_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE NOTICE
+(
+    `date`    DATE            NOT NULL, 
+    `notice`  VARCHAR(500)    NULL, 
+    PRIMARY KEY (date)
+);
+
+
+-- USER Table Create SQL
+CREATE TABLE LOGIN_LOG
+(
+    `login_num`   INT            NOT NULL    AUTO_INCREMENT, 
+    `date`        DATETIME       NOT NULL, 
+    `user_id`     VARCHAR(45)    NOT NULL, 
+    `user_name`   VARCHAR(45)    NOT NULL, 
+    `ip_address`  VARCHAR(45)    NOT NULL, 
+    PRIMARY KEY (login_num)
+);
+
+ALTER TABLE LOGIN_LOG
+    ADD CONSTRAINT FK_LOGIN_LOG_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE SUB_LAST_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `user_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE SUB_LAST_WORK
+    ADD CONSTRAINT FK_SUB_LAST_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE SUB_THIS_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `uwer_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE SUB_THIS_WORK
+    ADD CONSTRAINT FK_SUB_THIS_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- USER Table Create SQL
+CREATE TABLE SUB_FUTURE_WORK
+(
+    `work_num`    INT             NOT NULL    AUTO_INCREMENT, 
+    `start_date`  DATE            NOT NULL, 
+    `end_date`    DATE            NOT NULL, 
+    `user_id`     VARCHAR(45)     NOT NULL, 
+    `user_name`   VARCHAR(45)     NOT NULL, 
+    `work`        VARCHAR(500)    NULL, 
+    PRIMARY KEY (work_num)
+);
+
+ALTER TABLE SUB_FUTURE_WORK
+    ADD CONSTRAINT FK_SUB_FUTURE_WORK_user_id_USER_user_id FOREIGN KEY (user_id)
+        REFERENCES USER (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+

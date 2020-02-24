@@ -282,7 +282,7 @@ const HandleThisWorkSheet = (req, res) => {
                     } else {      
                         // 금주 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sql_str2, [start_date, end_date, userid, username, userwork], (error) => {
+                            db.query(sql_str2, [start_date, end_date, userid, username, work], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
