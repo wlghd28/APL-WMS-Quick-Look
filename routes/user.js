@@ -139,12 +139,15 @@ const GetSignupPage = (req, res) => {
 const HandleSignup = (req, res) => {
     console.log('회원가입 요청 보냄');
     let sql_str1            = 'SELECT * FROM USER WHERE user_id = ?';
-    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank) VALUES(?,?,?,?)';
+    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank, phonenum, question, answer) VALUES(?,?,?,?,?,?,?)';
     let body                = req.body;
     let userid              = body.uid;
     let username            = body.uname;
     let password            = body.pass;
     let confirm_password    = body.pass2;
+    let phonenum            = body.
+    let question            = body.
+    let answer              = body.
     console.log(req.body);
     console.log('POST 데이터 받음');
 

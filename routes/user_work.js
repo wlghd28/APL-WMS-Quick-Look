@@ -188,7 +188,12 @@ const  GetThisWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        this_work = results;
+                        if(results.length <= 0){
+                            this_work = null;
+                        }
+                        else{
+                            this_work = results[0].work;
+                        }
                         callback(null);
                     }
                 });
@@ -199,7 +204,12 @@ const  GetThisWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {    
-                        sub_this_work = results;   
+                        if(results.length <= 0){
+                            sub_this_work = null;
+                        }
+                        else{
+                            sub_this_work = results[0].work;
+                        }
                         callback(null);         
                     }
                 });
@@ -369,7 +379,11 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                           futureWork = results;
+                        if(results.length <= 0){
+                            futureWork = null;
+                        } else {
+                            futureWork = results[0].work;
+                        }
                     }
                     callback(null);
                 });
@@ -380,7 +394,11 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        sub_futureWork =  results;
+                        if(results.length <= 0){
+                            sub_futureWork = null;
+                        } else {
+                            sub_futureWork = results[0].work;
+                        }
                     }
                     callback(null);
                 });
@@ -523,10 +541,22 @@ const HandleFutureWorkSheet = (req, res) => {
     }
 };
 
+// 키워드 검색 하는 페이지를 출력합니다.
+const GetSearchPage = (req, res) => {
+
+};
+
+// 키워드 검색을 처리합니다.
+const HandleSearch = (req, res) => {
+
+};
+
 router.get('/inquire_worksheet', GetInquireWorkSheet);
 router.get('/this_worksheet', GetThisWorkSheet);
 router.get('/future_worksheet', GetFutureWorkSheet);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
+router.get('/search', GetSearchPage);
+router.get('/result', HandleSearch);
 
 module.exports = router
