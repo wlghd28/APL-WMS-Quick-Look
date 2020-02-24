@@ -199,7 +199,37 @@ const GetFindIdPage = (req, res) => {
     ID 찾기를 처리합니다.
 */
 const HandleFindId = (req, res) => {
+    console.log("ID 찾기 POST 요청 보냄");
+    let sql_str = "SELECT user_id FROM USER WHERE phonenum = ? and user_name = ?";
+    let body = req.body;
+    let phonenum = body.phonenum;
+    let username = body.username;
 
+    let resultHtmlStream = '';
+    let errorHtmlStream = '';
+
+    db.query(sql_str, [phonenum, username], (error, results) => {
+        if (error) {     
+            console.log(error);
+            res.end("error");
+        } else {
+            // 테스트 코드
+            console.log(results);
+            
+            // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
+            if (results[0] == null) {
+                errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.status(562).end(ejs.render(errorHtmlStream, {
+                    'title' : '업무관리 프로그램',
+                    'url'   : '../../'})); 
+            } else {
+                  
+            }              
+        }
+    });
 };
 
 /*
