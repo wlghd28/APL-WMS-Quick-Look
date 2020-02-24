@@ -137,14 +137,14 @@ const GetInquireWorkSheet = (req, res) => {
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
-                    'title'         :'업무관리 프로그램',
-                    'url'           :'../../',
-                    lastWork        :last_result,
-                    'thisWork'      :this_result,
-                    'futureWork'    :future_result,
-                    sub_lastWork    :sub_last_result,
-                    'sub_thisWork'  :sub_this_result,
-                    'sub_futureWork':sub_future_result,
+                                                'title'         :'업무관리 프로그램',
+                                                'url'           :'../../',
+                                                lastWork        :last_result,
+                                                'thisWork'      :this_result,
+                                                'futureWork'    :future_result,
+                                                sub_lastWork    :sub_last_result,
+                                                'sub_thisWork'  :sub_this_result,
+                                                'sub_futureWork':sub_future_result,
                 }));
                 callback(null);
             }
@@ -158,7 +158,7 @@ const GetInquireWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
     }
 };
 
@@ -233,7 +233,7 @@ const  GetThisWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
     }
 };
 
@@ -350,7 +350,7 @@ const HandleThisWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));   
     }
 };
 
@@ -405,10 +405,10 @@ const  GetFutureWorkSheet = (req, res) => {
             },
             function(callback) {
                 res.end(ejs.render(htmlStream, {
-                    'title'         :'업무관리 프로그램',
-                    'url'           :'../../',
-                    futureWork      :futureWork,
-                    sub_futureWork  :sub_futureWork
+                                                'title'         :'업무관리 프로그램',
+                                                'url'           :'../../',
+                                                futureWork      :futureWork,
+                                                sub_futureWork  :sub_futureWork
                  })); 
                 callback(null);
             }
@@ -422,7 +422,9 @@ const  GetFutureWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
     }
 };
 
@@ -537,10 +539,13 @@ const HandleFutureWorkSheet = (req, res) => {
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
         errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream));  
+        res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
     }
 };
 
+<<<<<<< HEAD
 // 키워드 검색 하는 페이지를 출력합니다.
 const GetSearchPage = (req, res) => {
 
@@ -549,14 +554,40 @@ const GetSearchPage = (req, res) => {
 // 키워드 검색을 처리합니다.
 const HandleSearch = (req, res) => {
 
+=======
+/* 
+    키워드 검색 페이지를 출력합니다.
+*/
+const GetSearchPage = (req, res) => {
+    let searchBarHtmlStream = ''; 
+
+    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
+    searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+    res.end(ejs.render(searchBarHtmlStream, {
+                                            'title' : '키워드 검색',
+                                            'url'   : '../' }));
+};
+
+/* 
+    키워드 검색을 처리합니다.
+*/
+const HandleSearch = (req, res) => {
+    
+>>>>>>> c92e2c56b38998ce06055a8349d5100a80c3eb8b
 };
 
 router.get('/inquire_worksheet', GetInquireWorkSheet);
 router.get('/this_worksheet', GetThisWorkSheet);
 router.get('/future_worksheet', GetFutureWorkSheet);
+router.get('/search', GetSearchPage);
+router.get('/result', HandleSearch);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
 router.get('/search', GetSearchPage);
 router.get('/result', HandleSearch);
+
 
 module.exports = router

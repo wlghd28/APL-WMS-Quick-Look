@@ -10,9 +10,9 @@ const  router   = express.Router();
 const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소
-    user:       'root',         // DB접속 아이디
-    password:   'root',    // DB암호
-    database:   'work_management'        //사용할 DB명
+    user:       'root',             // DB접속 아이디
+    password:   'root',             // DB암호
+    database:   'work_management'   //사용할 DB명
 });
 
 
