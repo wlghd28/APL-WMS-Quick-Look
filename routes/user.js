@@ -3,12 +3,14 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
+const   methodOverride = require('method-override');
 //const   session     = require('express-session');
 const   router      = express.Router();
 const   requestIp   = require('request-ip');
 const   moment      = require('moment');
 require('moment-timezone');
 
+router.use(methodOverride('_method'));
 router.use(bodyParser.urlencoded({ extended: false }));
 
 /* 
@@ -262,7 +264,7 @@ const GetFindPwdPage = (req, res) => {
 */
 // Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
 const GetAlterPwdPage = (req, res) => {
-    console.log("ID 찾기 POST 요청 보냄");
+    console.log("비밀번호 변경 POST 요청 보냄");
     let sql_str = "SELECT * FROM USER WHERE phonenum = ? and user_id = ? and question = ? and answer = ?";
     let body = req.body;
     let phonenum = body.phone;
@@ -292,7 +294,7 @@ const GetAlterPwdPage = (req, res) => {
                     'url'   : '../../'})); 
             } else {
                 resultHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/result_find_pwd.ejs','utf8'); 
+                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/change_pwd.ejs','utf8'); 
                 resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
@@ -310,7 +312,29 @@ const GetAlterPwdPage = (req, res) => {
     Password 변경을 처리합니다.
 */
 const HandleAlterPwd = (req, res) => {
+    console.log("비밀번호 변경 PUT 요청 보냄");
+    let sql_str = "UPDATE USER SET user_pwd = ? WHERE user_id = ?";
+    let body = req.body;
+    let userid = body.uid;
+    let password = body.pass;
 
+    let errorHtmlStream = '';
+
+    db.query(sql_str, [password, userid], (error, results) => {
+        if (error) {     
+            console.log(error);
+            errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+            errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+            errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+            res.status(562).end(ejs.render(errorHtmlStream, {
+                    'title' : '업무관리 프로그램',
+                    'url'   : '../../'})); 
+        } else {
+            // 테스트 코드
+            console.log(results);
+            res.redirect('/user/login');
+        }
+    });
 };
 
 
