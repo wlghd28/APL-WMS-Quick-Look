@@ -191,7 +191,7 @@ const GetFindIdPage = (req, res) => {
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(findIdHtmlStream, {
-                                            'title' : '회원가입',
+                                            'title' : 'ID 찾기',
                                             'url'   : '../' }));
 };
 
@@ -232,7 +232,7 @@ const HandleFindId = (req, res) => {
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render( resultHtmlStream, {
-                    'title' : '회원가입',
+                    'title' : 'ID 찾기',
                     'url'   : '../',
                     'userid': results[0].user_id
                     }));
@@ -253,7 +253,7 @@ const GetFindPwdPage = (req, res) => {
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(findPwdHtmlStream, {
-                                            'title' : '회원가입',
+                                            'title' : '비밀번호 찾기',
                                             'url'   : '../' }));
 };
 
@@ -262,7 +262,48 @@ const GetFindPwdPage = (req, res) => {
 */
 // Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
 const GetAlterPwdPage = (req, res) => {
+    console.log("ID 찾기 POST 요청 보냄");
+    let sql_str = "SELECT * FROM USER WHERE phonenum = ? and user_id = ? and question = ? and answer = ?";
+    let body = req.body;
+    let phonenum = body.phone;
+    let userid = body.uid;
+    let question = body.question;
+    let answer = body.answer;
 
+    let resultHtmlStream = '';
+    let errorHtmlStream = '';
+
+    db.query(sql_str, [phonenum, userid, question, answer], (error, results) => {
+        if (error) {     
+            console.log(error);
+            res.end("error");
+        } else {
+            // 테스트 코드
+            console.log(results);
+
+            // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
+            if (results[0] == null) {
+                errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.status(562).end(ejs.render(errorHtmlStream, {
+                    'title' : '업무관리 프로그램',
+                    'url'   : '../../'})); 
+            } else {
+                resultHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/result_find_pwd.ejs','utf8'); 
+                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render( resultHtmlStream, {
+                    'title' : '비밀번호 변경',
+                    'url'   : '../',
+                    'userid': userid
+                    }));
+            }              
+        }
+    });
 };
 
 /*
