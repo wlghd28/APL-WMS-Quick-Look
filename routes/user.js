@@ -150,9 +150,9 @@ const HandleSignup = (req, res) => {
     let username            = body.uname;
     let password            = body.pass;
     let confirm_password    = body.pass2;
-    let phonenum            = body.
-    let question            = body.
-    let answer              = body.
+    let phonenum            = body.phone;
+    let question            = body.question;
+    let answer              = body.answer;
     console.log(req.body);
     console.log('POST 데이터 받음');
 
