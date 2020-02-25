@@ -145,8 +145,7 @@ const GetInquireWorkSheet = (req, res) => {
                                                 'futureWork'    :future_result,
                                                 sub_lastWork    :sub_last_result,
                                                 'sub_thisWork'  :sub_this_result,
-                                                'sub_futureWork':sub_future_result,
-                }));
+                                                'sub_futureWork':sub_future_result}));
                 callback(null);
             }
         ], function(error, results) {
@@ -154,12 +153,14 @@ const GetInquireWorkSheet = (req, res) => {
                 console.log(error);
         }); 
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let inquirePageErrorHtmlStream = '';
+        inquirePageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        inquirePageErrorHtmlStream = inquirePageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        inquirePageErrorHtmlStream = inquirePageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
+        res.status(562).end(ejs.render(inquirePageErrorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'error' : '업무 조회 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -229,12 +230,14 @@ const  GetThisWorkSheet = (req, res) => {
                 console.log(error);
         });
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let thisWorkPageErrorHtmlStream = '';
+        thisWorkPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        thisWorkPageErrorHtmlStream = thisWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        thisWorkPageErrorHtmlStream = thisWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
+        res.status(562).end(ejs.render(thisWorkPageErrorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'error' : '금주 업무 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -358,12 +361,14 @@ const HandleThisWorkSheet = (req, res) => {
         // 금주 업무 등록이 되어있는지 조사합니다.
         
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let HandleThisWorkErrorHtmlStream = '';
+        HandleThisWorkErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        HandleThisWorkErrorHtmlStream = HandleThisWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        HandleThisWorkErrorHtmlStream = HandleThisWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
-        res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));   
+        res.status(562).end(ejs.render(HandleThisWorkErrorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'error' : '금주 업무를 등록하는 도중'}));   
     }
 };
 
@@ -421,8 +426,7 @@ const  GetFutureWorkSheet = (req, res) => {
                                                 'title'         :'업무관리 프로그램',
                                                 'url'           :'../../',
                                                 futureWork      :futureWork,
-                                                sub_futureWork  :sub_futureWork
-                 })); 
+                                                sub_futureWork  :sub_futureWork})); 
                 callback(null);
             }
         ],  function(error, result) {
@@ -430,14 +434,15 @@ const  GetFutureWorkSheet = (req, res) => {
                 console.log(error);
         });
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let futureWorkPageErrorHtmlStream = '';
+        futureWorkPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        futureWorkPageErrorHtmlStream = futureWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        futureWorkPageErrorHtmlStream = futureWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream, {
+        res.status(562).end(ejs.render(futureWorkPageErrorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
+                                                        'url'   : '../../',
+                                                        'error' : '예정된 업무 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -559,14 +564,15 @@ const HandleFutureWorkSheet = (req, res) => {
                 console.log(error);
         });
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let handleFutureWorkErrorHtmlStream = '';
+        handleFutureWorkErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        handleFutureWorkErrorHtmlStream = handleFutureWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        handleFutureWorkErrorHtmlStream = handleFutureWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream, {
+        res.status(562).end(ejs.render(handleFutureWorkErrorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
+                                                        'url'   : '../../',
+                                                        'error' : '예정된 업무 등록을 처리하는 도중'}));  
     }
 };
 
@@ -575,25 +581,26 @@ const HandleFutureWorkSheet = (req, res) => {
 */
 const GetSearchPage = (req, res) => {
     if(req.session.userid){
-        let searchResultHtmlStream = ''; 
+        let searchBarHtmlStream = ''; 
 
-        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
-        searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
+        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-        res.end(ejs.render(searchResultHtmlStream, {
+        res.end(ejs.render(searchBarHtmlStream, {
                                                 'title' : '키워드 검색',
-                                                'url'   : '../' }));
+                                                'url'   : '../'}));
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let searchBarPageErrorHtmlStream = '';
+        searchBarPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        searchBarPageErrorHtmlStream = searchBarPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        searchBarPageErrorHtmlStream = searchBarPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream, {
+        res.status(562).end(ejs.render(searchBarPageErrorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
+                                                        'url'   : '../../',
+                                                        'error' : '키워드 검색 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -644,11 +651,10 @@ const HandleSearch = (req, res) => {
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(searchResultHtmlStream, {
-                                                                'title' : '키워드 검색결과',
-                                                                'url'   : '../',
-                                                                lastWork : last_results,
-                                                                sub_lastWork : sub_last_results
-                                                            }));
+                                                            'title' : '키워드 검색결과',
+                                                            'url'   : '../',
+                                                            lastWork : last_results,
+                                                            sub_lastWork : sub_last_results}));
                 callback(null);
             }
         ],  function(error, result) {
@@ -657,14 +663,15 @@ const HandleSearch = (req, res) => {
         });
         
     } else {
-        let errorHtmlStream = '';
-        errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        let handleSearchErrorHtmlStream = '';
+        handleSearchErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        handleSearchErrorHtmlStream = handleSearchErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        handleSearchErrorHtmlStream = handleSearchErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
-        res.status(562).end(ejs.render(errorHtmlStream, {
+        res.status(562).end(ejs.render(handleSearchErrorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
+                                                        'url'   : '../../',
+                                                        'error' : '키워드 검색을 처리하는 도중'}));  
     }
 };
 

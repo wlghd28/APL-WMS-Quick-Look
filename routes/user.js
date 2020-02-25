@@ -30,15 +30,15 @@ const db = mysql.createConnection({
     회원 로그인 화면을 출력합니다.
 */
 const GetLoginPage = (req, res) => {
-    let loginHtmlStream = ''; 
-    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); 
-    loginHtmlStream = loginHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    let loginPageHtmlStream = ''; 
+    loginPageHtmlStream = loginPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    loginPageHtmlStream = loginPageHtmlStream + fs.readFileSync(__dirname + '/../views/login.ejs','utf8'); 
+    loginPageHtmlStream = loginPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(loginHtmlStream, {
-                                        'title' : '로그인',
-                                        'url' : '../../' })); 
+    res.end(ejs.render(loginPageHtmlStream, {
+                                            'title' : '로그인',
+                                            'url' : '../../' })); 
 };
 
 /*
@@ -49,37 +49,35 @@ const HandleLogin = (req, res) => {
     let userid, userpass, username;
     let sql_str, sql_str2;
     let ip_address;
-    let errorHtmlStream = '';
+    let handleLoginErrorHtmlStream = '';
     moment.tz.setDefault("Asia/Seoul");
     
-    errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
+    handleLoginErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    handleLoginErrorHtmlStream = handleLoginErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    handleLoginErrorHtmlStream = handleLoginErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
 
-    console.log('로그인된 아이디 : ', body.uid);
-    console.log('로그인된 패스워드 : ', body.pass);
-  
     if (body.uid == '' || body.pass == '') {
-        res.status(562).end(ejs.render(errorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
-        console.log('로그인에러1');
+        res.status(562).end(ejs.render(handleLoginErrorHtmlStream, {
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'url'   : '../../',
+                                                                    'error' : '로그인을 처리하는 도중'}));  
     } else {
         sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
         sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(?, ?, ?, ?)";
         
         db.query(sql_str, (error, results, fields) => {
             if (error){
-                res.status(562).end(ejs.render(errorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../'}));  
+                res.status(562).end(ejs.render(handleLoginErrorHtmlStream, {
+                                                                            'title' : '업무관리 프로그램',
+                                                                            'url'   : '../../',
+                                                                            'error' : '로그인을 처리하는 도중'}));  
                 console.log(error); 
             } else {
                 if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
-                    res.status(562).end(ejs.render(errorHtmlStream, {
-                                                                    'title' : '업무관리 프로그램',
-                                                                    'url'   : '../../'}));  
-                    console.log('로그인에러2');
+                    res.status(562).end(ejs.render(handleLoginErrorHtmlStream, {
+                                                                                'title' : '업무관리 프로그램',
+                                                                                'url'   : '../../',
+                                                                                'error' : '로그인을 처리하는 도중'}));  
                 } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
                     console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함
@@ -132,14 +130,14 @@ const HandleLogout = (req, res) => {
     회원가입 페이지를 출력합니다.
 */
 const GetSignupPage = (req, res) => {
-    let signUpHtmlStream = ''; 
+    let signUpPageHtmlStream = ''; 
 
-    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
-    signUpHtmlStream = signUpHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
+    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(signUpHtmlStream, {
+    res.end(ejs.render(signUpPageHtmlStream, {
                                             'title' : '회원가입',
                                             'url'   : '../' }));
 };
@@ -189,14 +187,14 @@ const HandleSignup = (req, res) => {
     ID 찾기 페이지를 출력합니다.
 */
 const GetFindIdPage = (req, res) => {
-    let findIdHtmlStream = ''; 
+    let findIdPageHtmlStream = ''; 
 
-    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/find_id.ejs','utf8'); 
-    findIdHtmlStream = findIdHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/find_id.ejs','utf8'); 
+    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(findIdHtmlStream, {
+    res.end(ejs.render(findIdPageHtmlStream, {
                                             'title' : 'ID 찾기',
                                             'url'   : '../' }));
 };
@@ -211,8 +209,8 @@ const HandleFindId = (req, res) => {
     let phonenum = body.phone;
     let username = body.uname;
 
-    let resultHtmlStream = '';
-    let errorHtmlStream = '';
+    let resultHtmlPageStream = '';
+    let handleFindIdErrorHtmlStream = '';
 
     db.query(sql_str, [phonenum, username], (error, results) => {
         if (error) {     
@@ -224,24 +222,24 @@ const HandleFindId = (req, res) => {
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
-                errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                handleFindIdErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                handleFindIdErrorHtmlStream = handleFindIdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                handleFindIdErrorHtmlStream = handleFindIdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
-                res.status(562).end(ejs.render(errorHtmlStream, {
-                    'title' : '업무관리 프로그램',
-                    'url'   : '../../'})); 
+                res.status(562).end(ejs.render(handleFindIdErrorHtmlStream, {
+                                                                            'title' : '업무관리 프로그램',
+                                                                            'url'   : '../../',
+                                                                            'error' : '아이디 찾기를 처리하는 도중'})); 
             } else {
-                resultHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/result_find_id.ejs','utf8'); 
-                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                resultHtmlPageStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                resultHtmlPageStream = resultHtmlPageStream + fs.readFileSync(__dirname + '/../views/result_find_id.ejs','utf8'); 
+                resultHtmlPageStream = resultHtmlPageStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                res.end(ejs.render( resultHtmlStream, {
+                res.end(ejs.render( resultHtmlPageStream, {
                     'title' : 'ID 찾기',
                     'url'   : '../',
-                    'userid': results[0].user_id
-                    }));
+                    'userid': results[0].user_id}));
             }              
         }
     });
@@ -251,16 +249,16 @@ const HandleFindId = (req, res) => {
     Password 찾기 페이지를 출력합니다.
 */
 const GetFindPwdPage = (req, res) => {
-    let findPwdHtmlStream = ''; 
+    let findPwdPageHtmlStream = ''; 
 
-    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/find_pwd.ejs','utf8'); 
-    findPwdHtmlStream = findPwdHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/find_pwd.ejs','utf8'); 
+    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(findPwdHtmlStream, {
-                                            'title' : '비밀번호 찾기',
-                                            'url'   : '../' }));
+    res.end(ejs.render(findPwdPageHtmlStream, {
+                                                'title' : '비밀번호 찾기',
+                                                'url'   : '../' }));
 };
 
 /*
@@ -276,8 +274,8 @@ const GetAlterPwdPage = (req, res) => {
     let question = body.question;
     let answer = body.answer;
 
-    let resultHtmlStream = '';
-    let errorHtmlStream = '';
+    let pwdChangeResulPageHtmlStream = '';
+    let changePwdPageErrorHtmlStream = '';
 
     db.query(sql_str, [phonenum, userid, question, answer], (error, results) => {
         if (error) {     
@@ -289,24 +287,24 @@ const GetAlterPwdPage = (req, res) => {
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
-                errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-                errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                changePwdPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                changePwdPageErrorHtmlStream = changePwdPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                changePwdPageErrorHtmlStream = changePwdPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
-                res.status(562).end(ejs.render(errorHtmlStream, {
-                    'title' : '업무관리 프로그램',
-                    'url'   : '../../'})); 
+                res.status(562).end(ejs.render(changePwdPageErrorHtmlStream, {
+                                                                            'title' : '업무관리 프로그램',
+                                                                            'url'   : '../../',
+                                                                            'error' : '비밀번호 변경 페이지를 출력하는 도중'})); 
             } else {
-                resultHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/change_pwd.ejs','utf8'); 
-                resultHtmlStream = resultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                pwdChangeResulPageHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                pwdChangeResulPageHtmlStream = pwdChangeResulPageHtmlStream + fs.readFileSync(__dirname + '/../views/change_pwd.ejs','utf8'); 
+                pwdChangeResulPageHtmlStream = pwdChangeResulPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                res.end(ejs.render( resultHtmlStream, {
-                    'title' : '비밀번호 변경',
-                    'url'   : '../',
-                    'userid': userid
-                    }));
+                res.end(ejs.render(pwdChangeResulPageHtmlStream, {
+                                                                'title' : '비밀번호 변경',
+                                                                'url'   : '../',
+                                                                'userid': userid }));
             }              
         }
     });
@@ -322,18 +320,19 @@ const HandleAlterPwd = (req, res) => {
     let userid = body.uid;
     let password = body.pass;
 
-    let errorHtmlStream = '';
+    let HandleChangePwdErrorHtmlStream = '';
 
     console.log(body);
     db.query(sql_str, [password, userid], (error, results) => {
         if (error) {     
             console.log(error);
-            errorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-            errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-            errorHtmlStream = errorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
-            res.status(562).end(ejs.render(errorHtmlStream, {
-                    'title' : '업무관리 프로그램',
-                    'url'   : '../../'})); 
+            HandleChangePwdErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+            HandleChangePwdErrorHtmlStream = HandleChangePwdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+            HandleChangePwdErrorHtmlStream = HandleChangePwdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+            res.status(562).end(ejs.render(HandleChangePwdErrorHtmlStream, {
+                                                                            'title' : '업무관리 프로그램',
+                                                                            'url'   : '../../',
+                                                                            'error' : '패스워드 변경을 처리하는 도중'})); 
         } else {
             // 테스트 코드
             console.log(results);

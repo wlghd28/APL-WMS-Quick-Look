@@ -52,7 +52,7 @@ const DataBackup = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length > 0) {
-                            for(var i=0;i<results.length;i++) {
+                            for (var i = 0; i < results.length ; i++) {
                                 db.query(sql_str2, [results[i].start_date, results[i].end_date, 
                                     results[i].user_id, results[i].user_name, results[i].work], (error) => {
                                     if (error) {
@@ -81,7 +81,7 @@ const DataBackup = (req, res) => {
                         res.end("error");
                     } else {
                         if (results.length > 0) {
-                            for(var i=0;i<results.length;i++) {
+                            for(var i = 0; i < results.length; i++) {
                                 db.query(sql_str8, [results[i].start_date, results[i].end_date, 
                                     results[i].user_id, results[i].user_name, results[i].work], (error) => {
                                     if (error) {
