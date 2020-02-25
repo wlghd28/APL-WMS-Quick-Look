@@ -173,11 +173,26 @@ const HandleSignup = (req, res) => {
                         console.log(error);
                     } else {
                         console.log('Insertion into DB was completed!');
-                        res.redirect('/user/login');
+                        let signUpSucessPageHtmlStream = '';
+                        signUpSucessPageHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                        signUpSucessPageHtmlStream = signUpSucessPageHtmlStream + fs.readFileSync(__dirname + '/../views/signup_success.ejs','utf8');
+                        signUpSucessPageHtmlStream = signUpSucessPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+                
+                        res.status(562).end(ejs.render(signUpSucessPageHtmlStream, {
+                                                                        'title' : '회원가입 완료',
+                                                                        'url'   : '../../'})); 
                     }
                 }); // db.query();
             } else {
-                  res.end("error");
+                let handleSignUpErrorHtmlStream = '';
+                handleSignUpErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                handleSignUpErrorHtmlStream = handleSignUpErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                handleSignUpErrorHtmlStream = handleSignUpErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        
+                res.status(562).end(ejs.render(handleSignUpErrorHtmlStream, {
+                                                                'title' : '업무관리 프로그램',
+                                                                'url'   : '../../',
+                                                                'error' : '회원가입 처리도중 아이디 중복'}));  
             }              
         }
     });

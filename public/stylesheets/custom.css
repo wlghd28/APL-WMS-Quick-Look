@@ -19,7 +19,7 @@ a:hover { text-decoration: none; }
 .worksheet-btn:hover { background-color: #3C89DB; border: 1px solid #3C89DB;}
 .worksheet-btn > a{ background-color: #639DDC; border: 1px solid #639DDC; color: white;}
 .worksheet-btn > a:hover{ background-color: #3C89DB; border: 1px solid #3C89DB; color: white;}
-.logout-btn { background-color: #53C175; border: 1px solid #53C175; }
+.logout-btn { background-color: rgb(146, 209, 166); border: 1px solid rgb(146, 209, 166); }
 
 /* inquire_worksheet.ejs */
 #inquire-worksheet-container { border: 1px solid #dee2e6; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.438); }
