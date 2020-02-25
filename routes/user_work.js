@@ -186,32 +186,28 @@ const  GetThisWorkSheet = (req, res) => {
         async.waterfall([
             function(callback) {
                 db.query(this_sql_str, [req.session.userid], (error, results) => {
-                    if(error){
+                    if (error) {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length <= 0){
+                        if (results.length <= 0)
                             this_work = null;
-                        }
-                        else{
+                        else 
                             this_work = results[0].work;
-                        }
                         callback(null);
                     }
                 });
             },
             function(callback) {
                 db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
-                    if(error){
+                    if (error) {
                         console.log(error);
                         res.end("error");
                     } else {    
-                        if(results.length <= 0){
+                        if (results.length <= 0)
                             sub_this_work = null;
-                        }
-                        else{
+                        else
                             sub_this_work = results[0].work;
-                        }
                         callback(null);         
                     }
                 });
@@ -609,13 +605,13 @@ const GetSearchPage = (req, res) => {
 */
 const HandleSearch = (req, res) => {
     if(req.session.userid){
-        const  query = url.parse(req.url, true).query;
-        let search = query.search;
-        let last_results;
-        let sub_last_results;
+        const   query           = url.parse(req.url, true).query;
+        let     search          = query.search;
+        let     last_results;
+        let     sub_last_results;
 
-        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
-        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
+        let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
+        let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
         // 테스트 코드
         console.log(query);
         async.waterfall([
@@ -674,11 +670,50 @@ const HandleSearch = (req, res) => {
     }
 };
 
+/* 
+    전체 로그 보기 페이지를 출력합니다.
+*/
+const GetLogPage = (req, res) => {
+    if (req.session.userid) {
+        let sql_str1 = "SELECT date, user_id, user_name, ip_address FROM LOGIN_LOG;"
+        
+        db.query(sql_str1, (error, results) => {
+            if (error) {
+                res.end("error");
+                console.log(error);
+            } else {
+                let logPageHtmlStream = ''; 
+
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render(logPageHtmlStream, {
+                                                        'title'     : '전체 로그',
+                                                        'url'       : '../',
+                                                        results   : results}));
+            }
+        }); // db.query();
+    } else {
+        let logPageErrorHtmlStream = '';
+        logPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        res.status(562).end(ejs.render(logPageErrorHtmlStream, {
+                                                        'title' : 'Error',
+                                                        'url'   : '../../',
+                                                        'error' : '전체 로그 페이지를 출력하는 도중'}));  
+    }
+};
+
 router.get('/inquire_worksheet', GetInquireWorkSheet);
 router.get('/this_worksheet', GetThisWorkSheet);
 router.get('/future_worksheet', GetFutureWorkSheet);
 router.get('/search', GetSearchPage);
 router.get('/result', HandleSearch);
+router.get('/log', GetLogPage);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
 

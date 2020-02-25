@@ -1,0 +1,44 @@
+<section id="log-container" class="container">
+    <div class="d-flex justify-content-center mx-auto main-label" style="margin: 20px 0 10px 0;">
+        <form method="GET" action="#">
+            <div class="form-group" style="margin: 0 auto;">
+                <h4>전체 로그</h4>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control mr-1" name="log_id" placeholder="아이디를 입력해주세요">
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-light mr-3">검색</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="table table-bordered table-responsive">
+        <table id="inquire-table" style="text-align: center;">
+            <tbody class="table">
+                <tr class="table-warning">
+                    <th width="150px">이름</th>
+                    <th width="150px">아이디</th>
+                    <th width="600px">접속 날짜</th>
+                    <th width="600px">접속 IP</th>
+                </tr>
+                    <% results.forEach(function (data, index) { %>
+                    <tr>
+                        <td><%=data.user_name%></td>
+                        <td><%=data.user_id%></td>
+                        <td><%=data.date%></td>
+                        <td><%=data.ip_address%></td>
+                    </tr>
+                    <% }); %>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
