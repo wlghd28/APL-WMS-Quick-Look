@@ -1,24 +1,50 @@
+<script>
+    function validate() {
+        let userID      = $("#userID").val();
+        let userName    = $("#userName").val();
+        let userPwd     = $("#userPwd").val();
+        let userPwd2    = $("#userPwd2").val();
+        let userPhone   = $("#userPhone").val();
+        let userAnswer  = $("#userAnswer").val();
+        
+        if (userID == '' || userName == '' || userPwd == '' || userPwd2 == '' || userPhone == '' || userAnswer == '') {
+            alert("채우지 않은 항목이 있습니다. 다시 확인해주세요.");
+            return false;
+        }
+
+        if (userPwd != userPwd2) {
+            alert("비밀번호를 다시 확인해주세요.");
+            return false;
+        } 
+        alert("회원가입이 정상적으로 처리되었습니다.");
+        return true;
+    }
+    $(document).ready(function() {
+        bsCustomFileInput.init();
+    });
+</script>
+
 <div id="signup-container" class="container">
     <div class="row d-flex justify-content-center mx-auto">
         <div class="col-md-6 col-xs-12 div-style">
-        <form  accept-charset="UTF-8" role="form" method="POST" action="/user/signup">
+        <form  accept-charset="UTF-8" role="form" method="POST" action="/user/signup" onsubmit="return validate()">
             <div class="d-flex justify-content-center mx-auto main-label" style="margin: 30px 0 10px 0;">
                 <h4 style="margin-top: 50px;">Sign Up</h4>
             </div>
             <div class="form-group">
-                <input type="text" name="uid" class="form-control text-box" placeholder="아이디">
+                <input type="text" id="userID" name="uid" class="form-control text-box" placeholder="아이디">
             </div>
             <div class="form-group">
-                <input type="text" name="uname" class="form-control text-box" placeholder="이름">
+                <input type="text" id="userName" name="uname" class="form-control text-box" placeholder="이름">
             </div>
             <div class="form-group">
-                <input type="password" name="pass" class="form-control text-box" placeholder="비밀번호">
+                <input type="password" id="userPwd" name="pass" class="form-control text-box" placeholder="비밀번호">
             </div>
             <div class="form-group">
-                <input type="password" name="pass2" class="form-control text-box" placeholder="비밀번호 확인">
+                <input type="password" id="userPwd2" name="pass2" class="form-control text-box" placeholder="비밀번호 확인">
             </div>
             <div class="form-group">
-                <input type="text" name="phone" class="form-control text-box" placeholder="휴대폰 번호(-제외)">
+                <input type="text" id="userPhone" name="phone" class="form-control text-box" placeholder="휴대폰 번호(-제외)">
             </div>
             <div class="form-group">
                 <select name="question" class="form-control">
@@ -27,7 +53,7 @@
                     <option value="book">자신이 가장 감명깊게 읽었던 책 제목은?</option>
                     <option value="animal">자신이 가장 좋아하는 동물은?</option>
                 </select>
-                <input type="text" name="answer" class="form-control text-box" placeholder="위 질문의 답변을 입력해주세요">
+                <input type="text" id="userAnswer" name="answer" class="form-control text-box" placeholder="위 질문의 답변을 입력해주세요">
             </div>
             <span style="text-align: center; font-size: 12px; color: rgb(20, 199, 100);">* 위 질문은 아이디를 찾을 때 참고됩니다.</span>
             <div class="form-group justify-content-center d-flex">
