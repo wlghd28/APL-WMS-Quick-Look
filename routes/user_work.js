@@ -190,7 +190,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {
                         if(results.length <= 0){
-                            this_work = '없음';
+                            this_work = null;
                         }
                         else{
                             this_work = results[0].work;
@@ -206,7 +206,7 @@ const  GetThisWorkSheet = (req, res) => {
                         res.end("error");
                     } else {    
                         if(results.length <= 0){
-                            sub_this_work = '없음';
+                            sub_this_work = null;
                         }
                         else{
                             sub_this_work = results[0].work;
@@ -246,6 +246,7 @@ const HandleThisWorkSheet = (req, res) => {
     if (req.session.userid) {
         console.log('금주 업무 등록 요청보냄');
         // 주업무 등록하는 쿼리문
+        let user_sql_str = 'SELECT * FROM USER WHERE user_id = ?';
         let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
         let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
         let sql_str3 = 'UPDATE THIS_WORK SET work = ? WHERE user_id = ?';
@@ -257,7 +258,7 @@ const HandleThisWorkSheet = (req, res) => {
 
         let body = req.body;
         let userid = req.session.userid;
-        let username = req.session.who;
+        let username;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
@@ -275,6 +276,17 @@ const HandleThisWorkSheet = (req, res) => {
 
         async.waterfall([
             function(callback) {
+                db.query(user_sql_str, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {    
+                        username = results[0].user_name;
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
                 db.query(sql_str1, [userid], (error, results) => {
                     if (error) {     
                         console.log(error);
@@ -282,7 +294,7 @@ const HandleThisWorkSheet = (req, res) => {
                     } else {      
                         // 금주 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sql_str2, [start_date, end_date, userid, username, userwork], (error) => {
+                            db.query(sql_str2, [start_date, end_date, userid, username, work], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
@@ -436,18 +448,19 @@ const HandleFutureWorkSheet = (req, res) => {
 
     if (req.session.userid) {
         console.log('예정된 업무 등록 요청보냄');
+        let user_sql_str = 'SELECT * FROM USER WHERE user_id = ?';
         let sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
-        let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
         let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
 
         let sub_sql_str1 = 'SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?';
-        let sub_sql_str2 = 'INSERT INTO SUB_FUTURE_WORK(start_date, end_date, user_id, work) VALUES(?,?,?,?)';
+        let sub_sql_str2 = 'INSERT INTO SUB_FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
         let sub_sql_str3 = 'UPDATE SUB_FUTURE_WORK SET work = ? WHERE user_id = ?';
         
         
         let body = req.body;
         let userid = req.session.userid;
-        //let username = req.session.who;
+        let username;
         let start_date, end_date;
         let today = moment().day();
         let work = body.work;
@@ -464,6 +477,17 @@ const HandleFutureWorkSheet = (req, res) => {
 
         async.waterfall([
             function(callback) {
+                db.query(user_sql_str, [userid], (error, results) => {
+                    if (error) {     
+                        console.log(error);
+                        res.end("error");
+                    } else {    
+                        username = results[0].user_name;
+                    }
+                });
+                callback(null);
+            },
+            function(callback) {
                 // 예정된 주업무 등록이 되어있는지 조사합니다.
                 db.query(sql_str1, [userid], (error, results) => {
                     if (error) {     
@@ -472,7 +496,7 @@ const HandleFutureWorkSheet = (req, res) => {
                     } else {
                         // 예정된 주업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sql_str2, [start_date, end_date, userid, work], (error) => {
+                            db.query(sql_str2, [start_date, end_date, userid, username, work], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
@@ -504,7 +528,7 @@ const HandleFutureWorkSheet = (req, res) => {
 
                         // 예정된 부업무 등록이 안 되어있는 상태일 경우 데이터를 삽입합니다.
                         if (results[0] == null) {
-                            db.query(sub_sql_str2, [start_date, end_date, userid, sub_work], (error) => {
+                            db.query(sub_sql_str2, [start_date, end_date, userid, username, sub_work], (error) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
@@ -584,13 +608,13 @@ const HandleSearch = (req, res) => {
         let last_results;
         let sub_last_results;
 
-        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work 'LIKE %?%'";
-        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work 'LIKE %?%'";
+        let sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
+        let sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
         // 테스트 코드
         console.log(query);
         async.waterfall([
             function(callback) {
-                db.query(sql_str1, [search], (error, results) => {
+                db.query(sql_str1, (error, results) => {
                     if (error) {
                         res.end("error");
                         console.log(error);
@@ -601,7 +625,7 @@ const HandleSearch = (req, res) => {
                 }); // db.query();
             },
             function(callback){
-                db.query(sql_str2, [search], (error, results) => {
+                db.query(sql_str2, (error, results) => {
                     if (error) {
                         res.end("error");
                         console.log(error);

@@ -3,6 +3,14 @@
         <div class="col-sm-20">
             <div class="container">
                 <h2>예정 업무 일지</h2>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>주업무</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>부업무</h4>
+                    </div>
+                </div>
                 <form role="form" method="POST" action="/userwork/upload_future_worksheet" style="width: 100%;">
                     <textarea style="display: inline-block" id="future-main-textarea" name="work" 
                         class="form-control" placeholder="예정된 주업무를 입력하세요"><%=futureWork%></textarea>
