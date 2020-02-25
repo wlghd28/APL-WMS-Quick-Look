@@ -708,12 +708,54 @@ const GetLogPage = (req, res) => {
     }
 };
 
+// 로그정보를 키워드로 검색합니다.
+const GetSearchLog = (req, res) => {
+
+    if(req.session.userid){
+        const   query = url.parse(req.url, true).query;
+        let logid = query.log_id;
+        let sql_str = "SELECT * FROM LOGIN_LOG WHERE user_name = ?;";
+
+        db.query(sql_str, [logid], (error, results) => {
+            if (error) {
+                res.end("error");
+                console.log(error);
+            } else {
+                let logPageHtmlStream = ''; 
+
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render(logPageHtmlStream, {
+                                                        'title'     : '로그 검색 결과',
+                                                        'url'       : '../',
+                                                        results   : results}));
+            }
+        }); // db.query();
+
+    } else {
+        let logPageErrorHtmlStream = '';
+        logPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        res.status(562).end(ejs.render(logPageErrorHtmlStream, {
+                                                        'title' : 'Error',
+                                                        'url'   : '../../',
+                                                        'error' : '로그 검색 페이지를 출력하는 도중'}));  
+    }
+};
+
+
 router.get('/inquire_worksheet', GetInquireWorkSheet);
 router.get('/this_worksheet', GetThisWorkSheet);
 router.get('/future_worksheet', GetFutureWorkSheet);
 router.get('/search', GetSearchPage);
 router.get('/result', HandleSearch);
 router.get('/log', GetLogPage);
+router.get('/logsearch', GetSearchLog);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
 
