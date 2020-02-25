@@ -601,7 +601,6 @@ const GetSearchPage = (req, res) => {
     키워드 검색을 처리합니다.
 */
 const HandleSearch = (req, res) => {
-
     if(req.session.userid){
         const  query = url.parse(req.url, true).query;
         let search = query.search;
