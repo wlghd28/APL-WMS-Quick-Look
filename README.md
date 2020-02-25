@@ -1,4 +1,4 @@
-# APL-WMS-Quick-Look2
+# 에이피엘 업무관리 시스템(한 눈에 보기)
 
 ## :smile: 만든이
 > [조재희](https://github.com/cbw1030)
@@ -21,3 +21,6 @@
 
 ## :cat: 버전
 > - 20.02.25 v1.0 기능 구현 완료
+
+## :page_facing_up: Notes
+> - NULL
