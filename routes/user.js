@@ -20,7 +20,7 @@ const db = mysql.createConnection({
     host:       'localhost',        // DB서버 IP주소
     port:       3306,               // DB서버 Port주소
     user:       'root',             // DB접속 아이디
-    password:   'snt3410',             // DB암호
+    password:   'root',             // DB암호
     database:   'work_management'   //사용할 DB명
 });
 
@@ -60,22 +60,26 @@ const HandleLogin = (req, res) => {
     console.log('로그인된 패스워드 : ', body.pass);
   
     if (body.uid == '' || body.pass == '') {
-        alert("아이디나 암호가 입력되지 않아서 로그인할 수 없습니다.");
         res.status(562).end(ejs.render(errorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
                                                         'url'   : '../../'}));  
+        console.log('로그인에러1');
     } else {
         sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
         sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(?, ?, ?, ?)";
         
         db.query(sql_str, (error, results, fields) => {
-            if (error) 
-            res.status(562).end(ejs.render(errorHtmlStream, {'title' : '업무관리 프로그램'}));  
-            else {
+            if (error){
+                res.status(562).end(ejs.render(errorHtmlStream, {
+                                                        'title' : '업무관리 프로그램',
+                                                        'url'   : '../../'}));  
+                console.log(error); 
+            } else {
                 if (results.length <= 0) {  // select 조회결과가 없는 경우 (즉, 등록계정이 없는 경우)
                     res.status(562).end(ejs.render(errorHtmlStream, {
                                                                     'title' : '업무관리 프로그램',
                                                                     'url'   : '../../'}));  
+                    console.log('로그인에러2');
                 } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
                     console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함

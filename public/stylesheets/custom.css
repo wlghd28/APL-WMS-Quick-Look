@@ -26,7 +26,6 @@ a:hover { text-decoration: none; }
 .table { border-collapse:collapse; width:100%; } 
 .table tbody { overflow-y: auto; overflow-x: hidden; float: left; height: 610px; }
 #inquire-table > tbody > tr { width: 100%;}
-/* .scroll-td { height: 210px; overflow-y: auto; overflow-x: hidden; } */
 
 
 /* today_worksheet.ejs */
