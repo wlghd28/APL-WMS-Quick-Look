@@ -267,11 +267,11 @@ const HandleThisWorkSheet = (req, res) => {
         end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
 
 
-        console.log(req.body);
-        console.log(userid);
-        console.log(start_date);
-        console.log(end_date);
-        console.log('POST 데이터 받음');
+        // console.log(req.body);
+        // console.log(userid);
+        // console.log(start_date);
+        // console.log(end_date);
+        // console.log('POST 데이터 받음');
 
         async.waterfall([
             function(callback) {
@@ -471,10 +471,10 @@ const HandleFutureWorkSheet = (req, res) => {
         end_date = moment().add(13 - today, 'days').format("YYYY-MM-DD");
 
 
-        console.log(req.body);
-        console.log(start_date);
-        console.log(end_date);
-        console.log('POST 데이터 받음');
+        // console.log(req.body);
+        // console.log(start_date);
+        // console.log(end_date);
+        // console.log('POST 데이터 받음');
 
         async.waterfall([
             function(callback) {
@@ -613,7 +613,7 @@ const HandleSearch = (req, res) => {
         let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
         let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
         // 테스트 코드
-        console.log(query);
+        //console.log(query);
         async.waterfall([
             function(callback) {
                 db.query(sql_str1, (error, results) => {

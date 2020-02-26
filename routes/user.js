@@ -79,7 +79,7 @@ const HandleLogin = (req, res) => {
                                                                                 'url'   : '../../',
                                                                                 'error' : '로그인을 처리하는 도중'}));  
                 } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
-                    console.log("results: ", results);  
+                    //console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함
                         userid    = user_data.user_id;  
                         userpass  = user_data.user_pwd; 
@@ -97,7 +97,7 @@ const HandleLogin = (req, res) => {
                                 req.session.admin = true;
 
                             ip_address = requestIp.getClientIp(req);
-                            console.log("ip_address: ", ip_address);
+                            //console.log("ip_address: ", ip_address);
 
                             // 접속로그를 남깁니다.
                             db.query(sql_str2, [moment().format('YYYY-MM-DD HH:mm:ss'), userid, username, ip_address], (error) => {
@@ -123,7 +123,7 @@ const HandleLogin = (req, res) => {
 const HandleLogout = (req, res) => {
     req.session.destroy();     // 세션을 제거하여 인증오작동 문제를 해결
     res.redirect('/user/login');         // 로그아웃후 메인화면으로 재접속
-    console.log('로그아웃 완료!!');
+    //console.log('로그아웃 완료!!');
 }
 
 /*
@@ -146,7 +146,7 @@ const GetSignupPage = (req, res) => {
     회원가입을 처리합니다.
 */
 const HandleSignup = (req, res) => {
-    console.log('회원가입 요청 보냄');
+    //console.log('회원가입 요청 보냄');
     let sql_str1            = 'SELECT * FROM USER WHERE user_id = ?';
     let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank, phonenum, question, answer) VALUES(?,?,?,?,?,?,?)';
     let body                = req.body;
@@ -157,8 +157,9 @@ const HandleSignup = (req, res) => {
     let phonenum            = body.phone;
     let question            = body.question;
     let answer              = body.answer;
-    console.log(req.body);
-    console.log('POST 데이터 받음');
+
+    // console.log(req.body);
+    // console.log('POST 데이터 받음');
 
     db.query(sql_str1, [userid], (error, results) => {
         if (error) {     
@@ -218,7 +219,7 @@ const GetFindIdPage = (req, res) => {
     ID 찾기를 처리합니다.
 */
 const HandleFindId = (req, res) => {
-    console.log("ID 찾기 POST 요청 보냄");
+    //console.log("ID 찾기 POST 요청 보냄");
     let sql_str = "SELECT user_id FROM USER WHERE phonenum = ? and user_name = ?";
     let body = req.body;
     let phonenum = body.phone;
@@ -233,7 +234,7 @@ const HandleFindId = (req, res) => {
             res.end("error");
         } else {
             // 테스트 코드
-            console.log(results);
+            //console.log(results);
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
@@ -281,7 +282,7 @@ const GetFindPwdPage = (req, res) => {
 */
 // Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
 const GetAlterPwdPage = (req, res) => {
-    console.log("비밀번호 변경 POST 요청 보냄");
+    //console.log("비밀번호 변경 POST 요청 보냄");
     let sql_str = "SELECT * FROM USER WHERE phonenum = ? and user_id = ? and question = ? and answer = ?";
     let body = req.body;
     let phonenum = body.phone;
@@ -298,7 +299,7 @@ const GetAlterPwdPage = (req, res) => {
             res.end("error");
         } else {
             // 테스트 코드
-            console.log(results);
+            //console.log(results);
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
@@ -329,7 +330,7 @@ const GetAlterPwdPage = (req, res) => {
     Password 변경을 처리합니다.
 */
 const HandleAlterPwd = (req, res) => {
-    console.log("비밀번호 변경 PUT 요청 보냄");
+    //console.log("비밀번호 변경 PUT 요청 보냄");
     let sql_str = "UPDATE USER SET user_pwd = ? WHERE user_id = ?";
     let body = req.body;
     let userid = body.uid;
@@ -337,7 +338,7 @@ const HandleAlterPwd = (req, res) => {
 
     let HandleChangePwdErrorHtmlStream = '';
 
-    console.log(body);
+    //console.log(body);
     db.query(sql_str, [password, userid], (error, results) => {
         if (error) {     
             console.log(error);
@@ -350,7 +351,7 @@ const HandleAlterPwd = (req, res) => {
                                                                             'error' : '패스워드 변경을 처리하는 도중'})); 
         } else {
             // 테스트 코드
-            console.log(results);
+            //console.log(results);
             res.redirect('/user/login');
         }
     });
