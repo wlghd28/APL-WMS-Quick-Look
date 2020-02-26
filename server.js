@@ -40,6 +40,7 @@ app.use(session({ key: 'sid',
                   secret: 'secret key',  // 세션id 암호화할때 사용
                   resave: false,         // 접속할때마다 id부여금지
                   saveUninitialized: true })); // 세션id사용전에는 발급금지
+
 /*
     URI와 핸들러를 매핑
 */

@@ -1,1 +1,52 @@
-test
+<!-- <script>
+    var socket = io('http://172.30.1.25:3000');
+
+    socket.on('chatMessage', function(msg){
+        $('#messages').append($('<li>').text(msg));
+    });      
+
+    $('form').submit(function(){
+        socket.emit('chatMessage', $('#m').val());
+        $('#m').val('');
+        return false;
+    });
+</script> -->
+<div class="container">
+    <h3 class=" text-center">Messaging</h3>
+    <div class="messaging">
+        <div class="inbox_msg">
+            <div class="mesgs">
+                <div class="msg_history">
+                    <div class="incoming_msg">
+                        <!-- 임시로 잠깐 주석처리 -->
+                        <!-- <div class="incoming_msg_img">
+                            <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+                        </div> -->
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p>Test중입니다~~~~~~~</p>
+                                <span class="time_date">
+                                    아이디 | 이름 | 현재시각 | 날짜</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p>Test중입니다~~~~~~~</p>
+                            <span class="time_date">
+                                현재시각 | 날짜</span>
+                        </div>
+                    </div>
+                    
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input type="text" class="write_msg" placeholder="Type a message"/>
+                            <button class="msg_send_btn" type="button">GO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -61,7 +61,7 @@ const GetChatPage = (req, res) => {
         res.status(562).end(ejs.render(ErrorHtmlStream, {
                                                                         'title' : '업무관리 프로그램',
                                                                         'url'   : '../../',
-                                                                        'error' : '로그인 정보ㄴ'})); 
+                                                                        'error' : '로그인 정보'})); 
     }
 };
 
