@@ -18,7 +18,7 @@ const db = mysql.createConnection({
     토요일에서 일요일이 넘어가는 자정이 될 경우 데이터를 백업합니다.
 */
 const DataBackup = (req, res) => {
-    //cron.schedule('0, 0, 0, *, *, 0', () => {
+    cron.schedule('0, 0, 0, *, *, 0', () => {
         // 금주 주업무 데이터를 지난 업무 데이터로 백업 시키는 과정
         let sql_str1 = "SELECT * FROM THIS_WORK";
         let sql_str2 = "INSERT INTO LAST_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)";
@@ -96,7 +96,7 @@ const DataBackup = (req, res) => {
             if (error)
                 console.log(error);
         }); 
-    //});
+    });
 };
 
 router.get('/backup', DataBackup);

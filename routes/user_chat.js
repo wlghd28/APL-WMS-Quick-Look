@@ -2,10 +2,7 @@ const   fs          = require('fs');
 const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
-const   bodyParser  = require('body-parser');
 const   router      = express.Router();
-
-router.use(bodyParser.urlencoded({ extended: false }));
 
 /* 
     데이터베이스 연동 소스코드 
@@ -18,21 +15,54 @@ const db = mysql.createConnection({
     database:   'work_management'   //사용할 DB명
 });
 
-
-
 /*
-    회원 로그인 화면을 출력합니다.
+    채팅 화면을 출력합니다.
 */
 const GetChatPage = (req, res) => {
-    let chatPageHtmlStream = ''; 
-    chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/chat.ejs','utf8'); 
-    chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    if(req.session.userid){
+        let sql_str = "SELECT * FROM USER WHERE user_id = ?;";
+        let userid = req.session.userid; 
+        let username;
 
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-    res.end(ejs.render(chatPageHtmlStream, {
-                                            'title' : '로그인',
-                                            'url' : '../../' })); 
+        db.query(sql_str, [userid], (error, results) => {
+            if (error) {     
+                console.log(error);
+
+                let ErrorHtmlStream = '';
+
+                ErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                ErrorHtmlStream = ErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                ErrorHtmlStream = ErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                res.status(562).end(ejs.render(ErrorHtmlStream, {
+                                                                                'title' : '업무관리 프로그램',
+                                                                                'url'   : '../../',
+                                                                                'error' : '채팅창을 여는 도중 DB'})); 
+            } else {
+                username = results[0].user_name;
+
+                let chatPageHtmlStream = ''; 
+
+                chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/chat.ejs','utf8'); 
+                chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render(chatPageHtmlStream, {
+                                                        'title' : '로그인',
+                                                        'url' : '../../' })); 
+                    }
+        });
+    } else {
+        let ErrorHtmlStream = '';
+                
+        ErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        ErrorHtmlStream = ErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        ErrorHtmlStream = ErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        res.status(562).end(ejs.render(ErrorHtmlStream, {
+                                                                        'title' : '업무관리 프로그램',
+                                                                        'url'   : '../../',
+                                                                        'error' : '로그인 정보ㄴ'})); 
+    }
 };
 
 router.get('/', GetChatPage);
