@@ -21,7 +21,7 @@ const db = mysql.createConnection({
 
 
 /*
-    회원 로그인 화면을 출력합니다.
+    채팅 화면을 출력합니다.
 */
 const GetChatPage = (req, res) => {
     let chatPageHtmlStream = ''; 
@@ -31,7 +31,7 @@ const GetChatPage = (req, res) => {
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(chatPageHtmlStream, {
-                                            'title' : '로그인',
+                                            'title' : '채팅',
                                             'url' : '../../' })); 
 };
 

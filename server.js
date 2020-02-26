@@ -43,6 +43,7 @@ app.use(session({ key: 'sid',
 /*
     소켓 통신 소스코드
 */
+/*
 io.on('connection', function(socket) {
 
     // 접속한 클라이언트의 정보가 수신되면
@@ -90,6 +91,7 @@ io.on('connection', function(socket) {
         console.log('user disconnected: ' + socket.name);
     });
 });
+*/
     
 /*
     URI와 핸들러를 매핑
