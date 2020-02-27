@@ -20,9 +20,9 @@ const db = mysql.createConnection({
     port:       3306,               // DB서버 Port주소
     user:       'root',             // DB접속 아이디
     password:   'root',             // DB암호
-    database:   'work_management'   //사용할 DB명
+    database:   'work_management',  //사용할 DB명
+    dateStrings:'date'
 });
-
 
 /* 
     업무 조회 페이지를 출력합니다.
@@ -30,6 +30,7 @@ const db = mysql.createConnection({
 const GetInquireWorkSheet = (req, res) => {
 
     if (req.session.userid) {
+        
         // 주업무 데이터를 가져오는 쿼리문
         let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id = ?";
         let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id = ?";
@@ -41,15 +42,16 @@ const GetInquireWorkSheet = (req, res) => {
         let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
 
 
-        let htmlStream      = '';
+        let inquirePageHtmlStream      = '';
     
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
+        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
+        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
         let last_result, this_result, future_result, sub_last_result, sub_this_result, sub_future_result;
+
         // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
         async.waterfall([
             function(callback) {
@@ -57,9 +59,8 @@ const GetInquireWorkSheet = (req, res) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
-                    } else{
-                            last_result = results;
-                    }
+                    } else 
+                        last_result = results;
                     callback(null);
                 });
             },
@@ -68,10 +69,8 @@ const GetInquireWorkSheet = (req, res) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
-                    } else{
-                            sub_last_result = results;
-
-                    }
+                    } else 
+                        sub_last_result = results;
                     callback(null);
                 });
             },
@@ -83,9 +82,8 @@ const GetInquireWorkSheet = (req, res) => {
                     } else {
                         if (results.length <= 0)
                             this_result = null;
-                        else {
-                            this_result = results[0].work;
-                        }
+                        else 
+                            this_result = results[0].work; // results는 배열로 받아온다. work는 this_work 테이블 내의 컬럼명.
                         callback(null);
                     }
                 });
@@ -98,9 +96,8 @@ const GetInquireWorkSheet = (req, res) => {
                     } else {
                         if (results.length <= 0)
                             sub_this_result = null;
-                        else {
+                        else 
                             sub_this_result = results[0].work;
-                        }
                         callback(null);
                     }
                 });
@@ -113,9 +110,8 @@ const GetInquireWorkSheet = (req, res) => {
                     } else {
                         if (results.length <= 0) 
                             future_result = null;
-                        else {
+                        else 
                             future_result = results[0].work;
-                        }
                         callback(null);
                     }
                    
@@ -129,23 +125,22 @@ const GetInquireWorkSheet = (req, res) => {
                     } else {
                         if (results.length <= 0) 
                             sub_future_result = null;
-                        else {
+                        else
                             sub_future_result = results[0].work;
-                        }
                         callback(null);
                     }
                 });
             },
             function(callback) {
-                res.end(ejs.render(htmlStream, {
-                                                'title'         :'업무관리 프로그램',
-                                                'url'           :'../../',
-                                                lastWork        :last_result,
-                                                'thisWork'      :this_result,
-                                                'futureWork'    :future_result,
-                                                sub_lastWork    :sub_last_result,
-                                                'sub_thisWork'  :sub_this_result,
-                                                'sub_futureWork':sub_future_result}));
+                res.end(ejs.render(inquirePageHtmlStream, {
+                                                            'title'         :'업무관리 프로그램',
+                                                            'url'           :'../../',
+                                                            lastWork        :last_result,
+                                                            'thisWork'      :this_result,
+                                                            'futureWork'    :future_result,
+                                                            sub_lastWork    :sub_last_result,
+                                                            'sub_thisWork'  :sub_this_result,
+                                                            'sub_futureWork':sub_future_result}));
                 callback(null);
             }
         ], function(error, results) {
@@ -682,6 +677,7 @@ const GetLogPage = (req, res) => {
                 res.end("error");
                 console.log(error);
             } else {
+                console.log(results);
                 let logPageHtmlStream = ''; 
 
                 logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
@@ -711,10 +707,10 @@ const GetLogPage = (req, res) => {
 // 로그정보를 키워드로 검색합니다.
 const GetSearchLog = (req, res) => {
 
-    if(req.session.userid){
-        const   query = url.parse(req.url, true).query;
-        let logid = query.log_id;
-        let sql_str = "SELECT * FROM LOGIN_LOG WHERE user_name = ?;";
+    if (req.session.userid) {
+        const   query   = url.parse(req.url, true).query;
+        let     logid   = query.log_id;
+        let     sql_str = "SELECT * FROM LOGIN_LOG WHERE user_name = ?;";
 
         db.query(sql_str, [logid], (error, results) => {
             if (error) {
@@ -737,9 +733,10 @@ const GetSearchLog = (req, res) => {
 
     } else {
         let logPageErrorHtmlStream = '';
-        logPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        logPageErrorHtmlStream  = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        logPageErrorHtmlStream  = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        logPageErrorHtmlStream  = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(logPageErrorHtmlStream, {
                                                         'title' : 'Error',

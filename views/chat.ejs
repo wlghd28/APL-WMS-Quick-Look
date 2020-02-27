@@ -1,5 +1,8 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
 <script>
-    var socket = io('http://gj.coo.kr');
+    var socket = io('http://172.30.1.39:3000');
 
     socket.on('sendmsg', function(msg){
         $('#messages').append($('<li>').text(msg));
@@ -13,7 +16,7 @@
 </script>
 
 <div class="container">
-    <h3 class=" text-center">Messaging</h3>
+    <h3 class="text-center">Messaging</h3>
     <div class="messaging">
         <div class="inbox_msg">
             <div class="mesgs">

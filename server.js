@@ -65,7 +65,7 @@ app.io.on('connection', function(socket){
     socket.broadcast.emit('새로운 분이 입장하셨습니다.');
     
     socket.on('sendmsg', function(msg){
-        socket.emit('sendmsg', msg);
+        app.io.emit('sendmsg', msg);
     }); 
 
     socket.on('disconnect', function(user){
