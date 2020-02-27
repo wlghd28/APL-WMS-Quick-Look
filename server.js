@@ -9,7 +9,6 @@ const   createError     = require('http-errors');
 const   path            = require('path');
 const   os              = require('os');
 const   app             = express();
-const   socketio        = require('socket.io');
 
 /*
     BMS 개발소스 모듈
@@ -59,20 +58,20 @@ app.listen(PORT, function () {
 });
 
 // 채팅 socket.io 서버 실행
-const chat = socketio.listen(app);
+app.io = require('socket.io')();
 
-chat.sockets.on('connection', function(socket){
+app.io.on('connection', function(socket){
     
-    socket.broadcast.emit('새로운 분이 입자하셨습니다.');
+    socket.broadcast.emit('새로운 분이 입장하셨습니다.');
+    
+    socket.on('sendmsg', function(msg){
+        app.io.emit('sendmsg', msg);
+    }); 
 
-	socket.on('startmsg', function(data){
-		console.log('가동메시지 수신(측정주기:%d)!',data);
-	
-	});
-	socket.on('stopmsg', function(data){
-		console.log('중지메시지 수신!');
-	
-	});
+    socket.on('disconnect', function(user){
+        console.log(user + '이(가) 나가셨습니다.');
+    });
+     
 });
 
 
