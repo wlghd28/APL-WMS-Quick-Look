@@ -49,7 +49,10 @@ const GetChatPage = (req, res) => {
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(chatPageHtmlStream, {
                                                         'title' : '로그인',
-                                                        'url' : '../../' })); 
+                                                        'url' : '../../' ,
+                                                        'username' : username,
+                                                        'userid' : userid
+                                                        })); 
                     }
         });
     } else {

@@ -34,13 +34,16 @@
         var $outgoing_msg_div       = $(`<div class="outgoing_msg"></div>`);
         var $sent_msg_div           = $(`<div class="sent_msg"></div>`);
         var $sent_msg_text          = $(`<p class="sent_msg_text">${msg}</p>`);
-        var $sent_time_date         = $(`<span class="time_date sent_time_date">아이디 | 이름 | 현재시각 | 날짜</span>`);
+        var $sent_time_date         = $(`<span class="time_date sent_time_date"><%=userid%> | <%=username%> | 현재시각 | 날짜</span>`);
 
         // 보낸 메세지 처리
         $sent_msg_div.append($sent_time_date);
         $sent_msg_div.append($sent_msg_text);
         $outgoing_msg_div.append($sent_msg_div);
-        $('#messages').append($outgoing_msg_div);
+        $('#messages')
+        .append($outgoing_msg_div)
+        .stop()
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 1000);
     });
 
     /*
@@ -60,7 +63,10 @@
         $received_withd_msg_div.append($reveived_msg_text);
         $received_msg_div.append($received_withd_msg_div);
         $incoming_msg_div.append($received_msg_div);
-        $('#messages').append($incoming_msg_div);
+        $('#messages')
+        .append($incoming_msg_div)
+        .stop()
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 1000);
     });      
 
     /*
@@ -76,5 +82,4 @@
         $('#msg').val('');
         return false;
     });
-
 </script>
