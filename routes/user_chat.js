@@ -51,9 +51,8 @@ const GetChatPage = (req, res) => {
                                                         'title' : '로그인',
                                                         'url' : '../../' ,
                                                         'username' : username,
-                                                        'userid' : userid
-                                                        })); 
-                    }
+                                                        'userid' : userid})); 
+            }
         });
     } else {
         let ErrorHtmlStream = '';
