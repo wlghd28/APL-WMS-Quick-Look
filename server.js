@@ -9,6 +9,9 @@ const   createError     = require('http-errors');
 const   path            = require('path');
 const   os              = require('os');
 const   app             = express();
+const   http            = require('http').Server(app); //1
+const   io              = require('socket.io')(http);    //1
+
 
 /*
     BMS 개발소스 모듈
@@ -52,26 +55,22 @@ app.use('/chat', chat);           // URI (/chat) 접속하면 chat.js로 라우�
 /*
     서버 실행 소스코드
 */ 
-app.listen(PORT, function () {
+http.listen(PORT, function () {
     let ip_address = getServerIp();
     console.log('서버실행: http://' + ip_address +':' + PORT + '/');
 });
-
 // 채팅 socket.io 서버 실행
-app.io = require('socket.io')();
-
-app.io.on('connection', function(socket){
+io.on('connection', function(socket){
     
     socket.broadcast.emit('새로운 분이 입장하셨습니다.');
     
     socket.on('sendmsg', function(msg){
-        app.io.emit('sendmsg', msg);
+        io.emit('sendmsg', msg);
     }); 
 
     socket.on('disconnect', function(user){
         console.log(user + '이(가) 나가셨습니다.');
-    });
-     
+    });   
 });
 
 
