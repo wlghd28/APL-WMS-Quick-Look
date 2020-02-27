@@ -1,53 +1,92 @@
+<div class="container">
+    <h3 class="text-center">Messaging</h3>
+    <div class="messaging">
+        <div class="inbox_msg">
+            <div class="mesgs">
+                <div id="messages" class="msg_history">
+                    <!-- <div class="incoming_msg">
+                        <div class="received_msg">
+                            <div class="received_withd_msg">
+                                <p class="msg_text">test111</p>
+                                <span class="time_date">
+                                    아이디 | 이름 | 현재시각 | 날짜
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="outgoing_msg">
+                        <div class="sent_msg">
+                            <p class="msg_text">test222</p>
+                            <span class="time_date">
+                                현재시각 | 날짜
+                            </span>
+                        </div>
+                    </div> -->
+                </div>
+                    
+                <form class="type_msg" action="">
+                    <div class="input_msg_write">
+                        <input type="text" id="msg" class="write_msg" placeholder="메세지를 입력하세요" autocomplete='off'/>
+                        <button class="msg_send_btn">GO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 
 <script>
     var socket = io('http://172.30.1.39:3000');
 
+    // var incoming_msg_div        = `<div class="incoming_msg"></div>`
+    // var received_msg_div        = `<div class="received_msg"></div>`
+    // var received_withd_msg_div  = `<div class="received_withd_msg"></div>`
+    // var outgoing_msg_div        = `<div class="outgoing_msg"></div>`
+    // var p                       = `<p></p>`
+    // var sent_msg_div            = `<div class="sent_msg"></div>`
+    // var time_date_span          = `<span class="time_date"></span>`
+
+    // incoming_msg_div.html(received_msg_div);
+    // received_msg_div.html(received_withd_msg_div);
+    // received_withd_msg_div.html(p);
+
+    // socket.on('sendmsg', function(msg){
+    //     console.log("메세지 받음");
+    //     $('#messages').append($(`
+    //         <div class="incoming_msg">
+    //             <div class="received_msg">
+    //                 <div class="received_withd_msg">
+    //                     <p id="received_msg_text">test111</p>
+    //                     <span class="time_date">
+    //                         아이디 | 이름 | 현재시각 | 날짜
+    //                     </span>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     `).eq(3).text(msg));
+    // });      
+
     socket.on('sendmsg', function(msg){
-        $('#messages').append($('<li>').text(msg));
+        console.log("메세지 받음");
+        
+        var $incoming_msg_div       = $('<div class="incoming_msg"></div>');
+        // alert(JSON.stringify($incoming_msg_div));
+        var $received_msg_div       = $('<div class="received_msg"></div>');
+        var $received_withd_msg_div = $('<div class="received_withd_msg"></div>');
+        var $msg_text               = $(`<p class="msg_text">${msg}</p>`);
+        
+        $received_withd_msg_div += $msg_text;
+        $received_msg_div       += $received_withd_msg_div;
+        $incoming_msg_div       += $received_msg_div;
+        $('#messages').append($incoming_msg_div);
     });      
 
-    $('form').submit(function(){
+    $('form').submit(function() {
         socket.emit('sendmsg', $('#msg').val());
         $('#msg').val('');
         return false;
     });
 </script>
-
-<div class="container">
-    <h3 class="text-center">Messaging</h3>
-    <div class="messaging">
-        <div class="inbox_msg">
-            <div class="mesgs">
-                <div class="msg_history">
-                    <div id="messages" class="incoming_msg">
-                        <!-- 임시로 잠깐 주석처리 -->
-                        <!-- <div class="incoming_msg_img">
-                            <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
-                        </div> -->
-                        <!-- <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Test중입니다~~~~~~~</p>
-                                <span class="time_date">
-                                    아이디 | 이름 | 현재시각 | 날짜</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Test중입니다~~~~~~~</p>
-                            <span class="time_date">
-                                현재시각 | 날짜</span>
-                        </div>
-                    </div>                    -->
-                    </div>
-                    <form action="">
-                        <input id="msg" autocomplete="off" />
-                        <button>Send</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
