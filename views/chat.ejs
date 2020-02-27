@@ -1,56 +1,80 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
-<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-
-<script>
-    var socket = io('http://172.30.1.39:3000');
-
-    socket.on('sendmsg', function(msg){
-        $('#messages').append($('<li>').text(msg));
-    });      
-
-    $('form').submit(function(){
-        socket.emit('sendmsg', $('#msg').val());
-        $('#msg').val('');
-        return false;
-    });
-</script>
-
-
 <div class="container">
-    <h3 class="text-center">Messaging</h3>
+    <h3 class="text-center" style="margin-top: 15px">Messaging</h3>
     <div class="messaging">
         <div class="inbox_msg">
             <div class="mesgs">
-                <div class="msg_history">
-                    <div class="incoming_msg">
-                        <!-- 임시로 잠깐 주석처리 -->
-                        <!-- <div class="incoming_msg_img">
-                            <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
-                        </div> -->
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Test중입니다~~~~~~~</p>
-                                <span class="time_date">
-                                    아이디 | 이름 | 현재시각 | 날짜</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Test중입니다~~~~~~~</p>
-                            <span class="time_date">
-                                현재시각 | 날짜</span>
-                        </div>
-                    </div>
+                <div id="messages" class="msg_history">
+                    <!-- 메시지 기록되는 공간 -->
                 </div>
-                    
-                <div class="type_msg">
+
+                <!-- 메시지 입력하는 input -->
+                <form class="type_msg" action="">
                     <div class="input_msg_write">
-                        <input type="text" class="write_msg" placeholder="Type a message"/>
-                        <button class="msg_send_btn" type="button">GO</button>
+                        <input type="text" id="msg" class="write_msg" placeholder="메세지를 입력하세요" autocomplete='off'/>
+                        <button class="msg_send_btn">GO</button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.slim.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+    var socket = io('http://192.168.0.38:3000');
+
+    /*
+        서버로부터 메세지가 수신됐을 때(보낸 사람만)
+    */
+    socket.on('sendmsg', function(msg){ 
+
+        //보낸 메세지
+        var $outgoing_msg_div       = $(`<div class="outgoing_msg"></div>`);
+        var $sent_msg_div           = $(`<div class="sent_msg"></div>`);
+        var $sent_msg_text          = $(`<p class="sent_msg_text">${msg}</p>`);
+        var $sent_time_date         = $(`<span class="time_date sent_time_date">아이디 | 이름 | 현재시각 | 날짜</span>`);
+
+        // 보낸 메세지 처리
+        $sent_msg_div.append($sent_time_date);
+        $sent_msg_div.append($sent_msg_text);
+        $outgoing_msg_div.append($sent_msg_div);
+        $('#messages').append($outgoing_msg_div);
+    });
+
+    /*
+        서버로부터 메세지가 수신됐을 때(보낸 사람을 제외한 모든 사람)
+    */
+    socket.on('sendmsg_broadcast', function(msg_broadcast){
+
+        // 받은 메세지
+        var $incoming_msg_div       = $(`<div class="incoming_msg"></div>`);
+        var $received_msg_div       = $(`<div class="received_msg"></div>`);
+        var $received_withd_msg_div = $(`<div class="received_withd_msg"></div>`);
+        var $reveived_msg_text      = $(`<p class="recevied_msg_text">${msg_broadcast}</p>`);
+        var $received_time_date     = $(`<span class="time_date received_time_date">아이디 | 이름 | 현재시각 | 날짜</span>`);
+
+        // 받은 메세지 처리
+        $received_withd_msg_div.append($received_time_date);
+        $received_withd_msg_div.append($reveived_msg_text);
+        $received_msg_div.append($received_withd_msg_div);
+        $incoming_msg_div.append($received_msg_div);
+        $('#messages').append($incoming_msg_div);
+    });      
+
+    /*
+        메세지 전송 소스코드
+    */
+    $('form').submit(function() {
+        
+        if ($('#msg').val() == '') {
+            alert('메세지를 입력해주세요.');
+            return false;
+        }
+        socket.emit('sendmsg', $('#msg').val());
+        $('#msg').val('');
+        return false;
+    });
+
+</script>
