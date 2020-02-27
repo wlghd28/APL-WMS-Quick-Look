@@ -11,6 +11,8 @@
                 <form class="type_msg" action="">
                     <div class="input_msg_write">
                         <input type="text" id="msg" class="write_msg" placeholder="메세지를 입력하세요" autocomplete='off'/>
+                        <input type="hidden" id="userid" value=<%=userid%>>
+                        <input type="hidden" id="username" value=<%=username%>>
                         <button class="msg_send_btn">GO</button>
                     </div>
                 </form>
@@ -43,20 +45,20 @@
         $('#messages')
         .append($outgoing_msg_div)
         .stop()
-        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 1000);
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0);
     });
 
     /*
         서버로부터 메세지가 수신됐을 때(보낸 사람을 제외한 모든 사람)
     */
-    socket.on('sendmsg_broadcast', function(msg_broadcast){
+    socket.on('sendmsg_broadcast', function(msg_broadcast, userid, username){
 
         // 받은 메세지
         var $incoming_msg_div       = $(`<div class="incoming_msg"></div>`);
         var $received_msg_div       = $(`<div class="received_msg"></div>`);
         var $received_withd_msg_div = $(`<div class="received_withd_msg"></div>`);
         var $reveived_msg_text      = $(`<p class="recevied_msg_text">${msg_broadcast}</p>`);
-        var $received_time_date     = $(`<span class="time_date received_time_date">아이디 | 이름 | 현재시각 | 날짜</span>`);
+        var $received_time_date     = $(`<span class="time_date received_time_date">${userid} | ${username} | 현재시각 | 날짜</span>`);
 
         // 받은 메세지 처리
         $received_withd_msg_div.append($received_time_date);
@@ -66,7 +68,7 @@
         $('#messages')
         .append($incoming_msg_div)
         .stop()
-        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 1000);
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0);
     });      
 
     /*
@@ -78,7 +80,7 @@
             alert('메세지를 입력해주세요.');
             return false;
         }
-        socket.emit('sendmsg', $('#msg').val());
+        socket.emit('sendmsg', $('#msg').val(), $('#userid').val(), $('#username').val());
         $('#msg').val('');
         return false;
     });

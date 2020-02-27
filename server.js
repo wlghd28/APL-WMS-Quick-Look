@@ -73,8 +73,8 @@ io.on('connection', function(socket) {
     });
 
     // 메세지를 보낸 해당 사람을 제외하고 모든사람들에게 전송
-    socket.on('sendmsg', function(msg) {
-        socket.broadcast.emit('sendmsg_broadcast', msg); 
+    socket.on('sendmsg', function(msg, userid, username) {
+        socket.broadcast.emit('sendmsg_broadcast', msg, userid, username); 
     });
 
     // 연결 끊겼을 때
