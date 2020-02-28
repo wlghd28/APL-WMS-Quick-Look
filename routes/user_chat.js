@@ -3,7 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   router      = express.Router();
-
+const   globaldata  = require('../server'); // 포트번호와 ip주소 데이터를 전역변수로 쓰기 위함.
 /* 
     데이터베이스 연동 소스코드 
 */
@@ -20,6 +20,7 @@ const db = mysql.createConnection({
 */
 const GetChatPage = (req, res) => {
     if(req.session.userid){
+        let ip_address = globaldata.ip + ':' + globaldata.PORT;
         let sql_str = "SELECT * FROM USER WHERE user_id = ?;";
         let userid = req.session.userid; 
         let username;
@@ -48,10 +49,12 @@ const GetChatPage = (req, res) => {
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(chatPageHtmlStream, {
-                                                        'title' : '로그인',
+                                                        'title' : '채팅창',
                                                         'url' : '../../' ,
                                                         'username' : username,
-                                                        'userid' : userid})); 
+                                                        'userid' : userid,
+                                                        'ip_address' : ip_address
+                                                        })); 
             }
         });
     } else {

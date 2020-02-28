@@ -26,7 +26,8 @@ const   chat            = require('./routes/user_chat');
     BMS 전용 포트주소 설정
 */
 const   PORT = 3000;
-
+// 포트번호를 외부 모듈로 뺍니다.
+module.exports.PORT = PORT;
 /*
     실행환경 설정부분
 */
@@ -57,6 +58,8 @@ app.use('/chat', chat);           // URI (/chat) 접속하면 chat.js로 라우�
 */ 
 http.listen(PORT, function () {
     let ip_address = getServerIp();
+    // ip주소를 외부 모듈로 뺍니다.
+    module.exports.ip = ip_address;
     console.log('서버실행: http://' + ip_address +':' + PORT + '/');
     
 });
