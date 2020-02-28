@@ -274,9 +274,8 @@ const HandleThisWorkSheet = (req, res) => {
                     if (error) {     
                         console.log(error);
                         res.end("error");
-                    } else {    
+                    } else   
                         username = results[0].user_name;
-                    }
                 });
                 callback(null);
             },
@@ -292,18 +291,16 @@ const HandleThisWorkSheet = (req, res) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
-                                    } else {
+                                    } else 
                                         console.log('Insertion into DB was completed!');
-                                    }
                             }); // db.query();
                         } else { // 금주 주업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
                             db.query(sql_str3, [work, userid], (error) => {
                                 if (error) {
                                     res.end("error");
                                     console.log(error);
-                                } else {
+                                } else 
                                     console.log('update set DB was completed!');           
-                                }
                             }); // db.query();
                         }              
                     }
@@ -322,19 +319,16 @@ const HandleThisWorkSheet = (req, res) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
-                                    } else {
+                                    } else 
                                         console.log('Insertion into DB was completed!');
-                                       
-                                    }
                             }); // db.query();
                         } else { // 금주 부업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
                             db.query(sub_sql_str3, [sub_work, userid], (error) => {
                                 if (error) {
                                     res.end("error");
                                     console.log(error);
-                                } else {
+                                } else 
                                     console.log('update set DB was completed!');
-                                }
                             }); // db.query();
                         }              
                     }
@@ -388,11 +382,10 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length <= 0){
+                        if(results.length <= 0)
                             futureWork = null;
-                        } else {
+                        else 
                             futureWork = results[0].work;
-                        }
                     }
                     callback(null);
                 });
@@ -403,11 +396,10 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length <= 0){
+                        if (results.length <= 0)
                             sub_futureWork = null;
-                        } else {
+                        else 
                             sub_futureWork = results[0].work;
-                        }
                     }
                     callback(null);
                 });
@@ -477,9 +469,8 @@ const HandleFutureWorkSheet = (req, res) => {
                     if (error) {     
                         console.log(error);
                         res.end("error");
-                    } else {    
+                    } else 
                         username = results[0].user_name;
-                    }
                 });
                 callback(null);
             },
@@ -496,18 +487,16 @@ const HandleFutureWorkSheet = (req, res) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
-                                    } else {
+                                    } else 
                                         console.log('Insertion into DB was completed!');                                   
-                                    }
                             }); // db.query();
                         } else { // 예정된 주업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
                             db.query(sql_str3, [work, userid], (error) => {
                                 if (error) {
                                     res.end("error");
                                     console.log(error);
-                                } else {
+                                } else 
                                     console.log('update set DB was completed!');                                  
-                                }
                             }); // db.query();
                         }    
                         callback(null);          
@@ -528,18 +517,16 @@ const HandleFutureWorkSheet = (req, res) => {
                                     if (error) {
                                         res.end("error");
                                         console.log(error);
-                                    } else {
+                                    } else 
                                         console.log('Insertion into DB was completed!');                                       
-                                    }
                             }); // db.query();
                         } else { // 예정된 부업무가 등록이 되어있는 상태일 경우 데이터를 수정합니다.
                             db.query(sub_sql_str3, [sub_work, userid], (error) => {
                                 if (error) {
                                     res.end("error");
                                     console.log(error);
-                                } else {
+                                } else 
                                     console.log('update set DB was completed!');
-                                }
                             }); // db.query();
                         }  
                         callback(null);            
@@ -677,7 +664,7 @@ const GetLogPage = (req, res) => {
                 res.end("error");
                 console.log(error);
             } else {
-                console.log(results);
+                //console.log(results);
                 let logPageHtmlStream = ''; 
 
                 logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
@@ -755,6 +742,5 @@ router.get('/log', GetLogPage);
 router.get('/logsearch', GetSearchLog);
 router.post('/upload_this_worksheet', HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
-
 
 module.exports = router
