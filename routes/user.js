@@ -85,7 +85,7 @@ const HandleLogin = (req, res) => {
                         userpass  = user_data.user_pwd; 
                         username  = user_data.user_name;
 
-                        console.log("DB에서 로그인성공한 ID/암호 : %s/%s", userid, userpass);
+                        //console.log("DB에서 로그인성공한 ID/암호 : %s/%s", userid, userpass);
 
                         // 로그인이 성공한 경우
                         if (body.uid == userid && body.pass == userpass) {
