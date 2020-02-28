@@ -30,13 +30,13 @@ a:hover { text-decoration: none; }
 
 
 /* today_worksheet.ejs */
-#today-worksheet-container > .row { width: 1000px; margin-top: 50px; text-align: center; margin: 5rem auto; }
+#today-worksheet-container > .row { width: 1000px; text-align: center; margin: auto; }
 #this-main-textarea { width: 470px; height: 300px; margin-bottom: 20px; display: inline-block; }
 #this-sub-textarea { width: 470px; height: 300px; margin-bottom: 20px; display: inline-block; }
 #registed-worksheet-table { width: 470px; height: 300px; border: 1px solid rgb(206, 212, 218); }
 
 /* future_worksheet.ejs */
-#future-worksheet-container > .row { width: 1000px; margin-top: 50px; text-align: center; margin: 5rem auto; }
+#future-worksheet-container > .row { width: 1000px; text-align: center; margin: auto; }
 #future-main-textarea { width: 470px; height: 300px; margin-bottom: 20px; display: inline-block; }
 #future-sub-textarea { width: 470px; height: 300px; margin-bottom: 20px; display: inline-block; }
 #registed-worksheet-table { width: 470px; height: 300px; border: 1px solid rgb(206, 212, 218); }

@@ -169,10 +169,11 @@ const  GetThisWorkSheet = (req, res) => {
         let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id = ?";
         let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
 
-        let htmlStream          = '';
+        let thisWorkPagehtmlStream          = '';
     
-        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');    
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
+        thisWorkPagehtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+        thisWorkPagehtmlStream = thisWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');       
+        thisWorkPagehtmlStream = thisWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
 
@@ -208,11 +209,11 @@ const  GetThisWorkSheet = (req, res) => {
                 });
             },
             function(callback) {
-                res.end(ejs.render(htmlStream, {
-                    'title'         :'업무관리 프로그램',
-                    'url'           :'../../',
-                    thisWork        :this_work,
-                    sub_thisWork    :sub_this_work
+                res.end(ejs.render(thisWorkPagehtmlStream, {
+                                                            'title'         :'업무관리 프로그램',
+                                                            'url'           :'../../',
+                                                            thisWork        :this_work,
+                                                            sub_thisWork    :sub_this_work
                  })); 
                 callback(null);
             }
@@ -260,13 +261,6 @@ const HandleThisWorkSheet = (req, res) => {
 
         start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
         end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
-
-
-        // console.log(req.body);
-        // console.log(userid);
-        // console.log(start_date);
-        // console.log(end_date);
-        // console.log('POST 데이터 받음');
 
         async.waterfall([
             function(callback) {
@@ -366,10 +360,11 @@ const  GetFutureWorkSheet = (req, res) => {
         let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
         let sub_future_sql_str = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
 
-        let htmlStream = '';
+        let futureWorkPagehtmlStream = '';
     
-        htmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
-        htmlStream = htmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); 
+        futureWorkPagehtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
+        futureWorkPagehtmlStream = futureWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+        futureWorkPagehtmlStream = futureWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
@@ -405,11 +400,11 @@ const  GetFutureWorkSheet = (req, res) => {
                 });
             },
             function(callback) {
-                res.end(ejs.render(htmlStream, {
-                                                'title'         :'업무관리 프로그램',
-                                                'url'           :'../../',
-                                                futureWork      :futureWork,
-                                                sub_futureWork  :sub_futureWork})); 
+                res.end(ejs.render(futureWorkPagehtmlStream, {
+                                                            'title'         :'업무관리 프로그램',
+                                                            'url'           :'../../',
+                                                            futureWork      :futureWork,
+                                                            sub_futureWork  :sub_futureWork})); 
                 callback(null);
             }
         ],  function(error, result) {
@@ -456,12 +451,6 @@ const HandleFutureWorkSheet = (req, res) => {
 
         start_date = moment().add(6 - today, 'days').format("YYYY-MM-DD");
         end_date = moment().add(13 - today, 'days').format("YYYY-MM-DD");
-
-
-        // console.log(req.body);
-        // console.log(start_date);
-        // console.log(end_date);
-        // console.log('POST 데이터 받음');
 
         async.waterfall([
             function(callback) {
@@ -562,6 +551,7 @@ const GetSearchPage = (req, res) => {
         let searchBarHtmlStream = ''; 
 
         searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
         searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
         searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
@@ -623,6 +613,7 @@ const HandleSearch = (req, res) => {
                 let searchResultHtmlStream = ''; 
 
                 searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
                 searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
                 searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
@@ -668,6 +659,7 @@ const GetLogPage = (req, res) => {
                 let logPageHtmlStream = ''; 
 
                 logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
                 logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
                 logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
     
@@ -704,17 +696,18 @@ const GetSearchLog = (req, res) => {
                 res.end("error");
                 console.log(error);
             } else {
-                let logPageHtmlStream = ''; 
+                let logResultPageHtmlStream = ''; 
 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
+                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
     
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                res.end(ejs.render(logPageHtmlStream, {
-                                                        'title'     : '로그 검색 결과',
-                                                        'url'       : '../',
-                                                        results   : results}));
+                res.end(ejs.render(logResultPageHtmlStream, {
+                                                            'title'     : '로그 검색 결과',
+                                                            'url'       : '../',
+                                                            results   : results}));
             }
         }); // db.query();
 

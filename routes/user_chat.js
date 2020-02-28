@@ -44,6 +44,7 @@ const GetChatPage = (req, res) => {
                 let chatPageHtmlStream = ''; 
 
                 chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
                 chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/chat.ejs','utf8'); 
                 chatPageHtmlStream = chatPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
