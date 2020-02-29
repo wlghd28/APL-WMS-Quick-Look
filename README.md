@@ -1,4 +1,4 @@
-# 에이피엘 업무관리 시스템(한 눈에 보기)
+# 에이피엘 업무관리 시스템
 
 ## :smile: 만든이
 > [조재희](https://github.com/cbw1030)
@@ -16,7 +16,10 @@
 
 ## :mag: 사용기술
 - [x] javascript/jQuery
-- [x] node.js/Express
+- [x] BootStrap4
+- [x] Node.js
+- [x] Express
+- [x] Socket.io
 - [x] MySQL 8.0.17
 
 ## :worried: 한계점
@@ -27,7 +30,6 @@
 > - 20.02.25 v1.1    로그 검색기능 추가
 > - 20.02.27 v1.1.1  날짜 포맷형식 해결
 > - 20.02.27 v1.2    채팅기능 추가
-> - v1.3 멀티채팅 DB연동 구현중
 
 ## :page_facing_up: Notes
-> - APL 인턴 웹 프로젝트
+> - 인턴 웹 프로젝트
