@@ -45,7 +45,7 @@
         $('#messages')
         .append($outgoing_msg_div)
         .stop()
-        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0);
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0); // 메세지가 길어질때 자동으로 스크롤바가 최하단으로 향함
     });
 
     /*
@@ -68,7 +68,7 @@
         $('#messages')
         .append($incoming_msg_div)
         .stop()
-        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0);
+        .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0); // 메세지가 길어질때 자동으로 스크롤바가 최하단으로 향함
     });      
 
     /*

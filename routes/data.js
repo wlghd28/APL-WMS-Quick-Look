@@ -44,9 +44,8 @@ const DataBackup = (req, res) => {
                                 if (error) {
                                     console.log(error);
                                     res.end("error");
-                                } else {
+                                } else 
                                     console.log("LAST_WORK data was inserted...");
-                                }
                             });
                         }
                     }
@@ -63,9 +62,8 @@ const DataBackup = (req, res) => {
                                 if (error) {
                                     console.log(error);
                                     res.end("error");
-                                } else {
+                                } else 
                                     console.log("SUB_LAST_WORK data was inserted...");
-                                }
                             });
                         }                      
                     }
@@ -78,17 +76,15 @@ const DataBackup = (req, res) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
-                    } else {
+                    } else 
                     console.log("THIS_WORK data was deleted...");
-                    }
                 });
                 db.query(sql_str9, (error) => {
                     if (error) {
                         console.log(error);
                         res.end("error");
-                    } else {
+                    } else 
                     console.log("SUB_THIS_WORK data was deleted...");
-                    }
                 });
                 callback(null);
             }

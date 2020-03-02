@@ -45,16 +45,16 @@ const GetLoginPage = (req, res) => {
     로그인을 처리합니다.
 */
 const HandleLogin = (req, res) => {
-    let body = req.body; // body에 login.ejs 폼으로부터 name값(uid, pass)과 uid, pass의 value값이 넘어옴
+    let body = req.body; // body에 login.ejs 폼으로부터 name값 value값이 객체 형식으로 넘어옴 {uid: '어쩌고', pass: '저쩌고'}
     let userid, userpass, username;
     let sql_str, sql_str2;
     let ip_address;
     let handleLoginErrorHtmlStream = '';
     moment.tz.setDefault("Asia/Seoul");
     
-    handleLoginErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-    handleLoginErrorHtmlStream = handleLoginErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-    handleLoginErrorHtmlStream = handleLoginErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
+    handleLoginErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+    handleLoginErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+    handleLoginErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');  
 
     if (body.uid == '' || body.pass == '') {
         res.status(562).end(ejs.render(handleLoginErrorHtmlStream, {
@@ -62,11 +62,11 @@ const HandleLogin = (req, res) => {
                                                                     'url'   : '../../',
                                                                     'error' : '로그인을 처리하는 도중'}));  
     } else {
-        sql_str = "SELECT * from USER where user_id ='"+ body.uid +"' and user_pwd='" + body.pass + "';";
+        sql_str = "SELECT * FROM USER WHERE user_id=? AND user_pwd=?;";
         sql_str2 = "INSERT INTO LOGIN_LOG(date, user_id, user_name, ip_address) VALUES(?, ?, ?, ?)";
         
-        db.query(sql_str, (error, results, fields) => {
-            if (error){
+        db.query(sql_str, [body.uid, body.pass], (error, results, fields) => {
+            if (error) {
                 res.status(562).end(ejs.render(handleLoginErrorHtmlStream, {
                                                                             'title' : '업무관리 프로그램',
                                                                             'url'   : '../../',
@@ -78,7 +78,7 @@ const HandleLogin = (req, res) => {
                                                                                 'title' : '업무관리 프로그램',
                                                                                 'url'   : '../../',
                                                                                 'error' : '로그인을 처리하는 도중'}));  
-                } else {  // select 조회결과가 있는 경우 (즉, 등록사용자인 경우)
+                } else {  // select 조회결과가 있는 경우 (즉, 등록된 계정이 존재하는 경우)
                     //console.log("results: ", results);  
                     results.forEach((user_data, index) => { // results는 db로부터 넘어온 key와 value를 0번째 방에 객체로 저장함
                         userid    = user_data.user_id;  
@@ -121,8 +121,8 @@ const HandleLogin = (req, res) => {
     로그아웃을 처리합니다.
 */
 const HandleLogout = (req, res) => {
-    req.session.destroy();     // 세션을 제거하여 인증오작동 문제를 해결
-    res.redirect('/user/login');         // 로그아웃후 메인화면으로 재접속
+    req.session.destroy();          // 세션을 완전히 제거하여 인증오작동 문제를 해결
+    res.redirect('/user/login');    // 로그아웃후 메인화면으로 재접속
     //console.log('로그아웃 완료!!');
 }
 
@@ -132,14 +132,14 @@ const HandleLogout = (req, res) => {
 const GetSignupPage = (req, res) => {
     let signUpPageHtmlStream = ''; 
 
-    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
-    signUpPageHtmlStream = signUpPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    signUpPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    signUpPageHtmlStream += fs.readFileSync(__dirname + '/../views/signup.ejs','utf8'); 
+    signUpPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(signUpPageHtmlStream, {
-                                            'title' : '회원가입',
-                                            'url'   : '../' }));
+                                                'title' : '회원가입',
+                                                'url'   : '../' }));
 };
 
 /*
@@ -147,8 +147,8 @@ const GetSignupPage = (req, res) => {
 */
 const HandleSignup = (req, res) => {
     //console.log('회원가입 요청 보냄');
-    let sql_str1            = 'SELECT * FROM USER WHERE user_id = ?';
-    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank, phonenum, question, answer) VALUES(?,?,?,?,?,?,?)';
+    let sql_str1            = 'SELECT * FROM USER WHERE user_id=?';
+    let sql_str2            = 'INSERT INTO USER(user_id, user_pwd, user_name, user_rank, phonenum, question, answer) VALUES(?, ?, ?, ?, ?, ?, ?)';
     let body                = req.body;
     let userid              = body.uid;
     let username            = body.uname;
@@ -167,7 +167,7 @@ const HandleSignup = (req, res) => {
             res.end("error");
         } else {
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
-            if (results[0] == null && password == confirm_password) {
+            if (results[0] == undefined && password == confirm_password) {
                 db.query(sql_str2, [userid, password, username, 0, phonenum, question, answer], (error) => {
                     if (error) {
                         res.end("error");
@@ -175,9 +175,9 @@ const HandleSignup = (req, res) => {
                     } else {
                         console.log('Insertion into DB was completed!');
                         let signUpSucessPageHtmlStream = '';
-                        signUpSucessPageHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                        signUpSucessPageHtmlStream = signUpSucessPageHtmlStream + fs.readFileSync(__dirname + '/../views/signup_success.ejs','utf8');
-                        signUpSucessPageHtmlStream = signUpSucessPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+                        signUpSucessPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                        signUpSucessPageHtmlStream += fs.readFileSync(__dirname + '/../views/signup_success.ejs','utf8');
+                        signUpSucessPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
                 
                         res.status(562).end(ejs.render(signUpSucessPageHtmlStream, {
                                                                         'title' : '회원가입 완료',
@@ -186,9 +186,9 @@ const HandleSignup = (req, res) => {
                 }); // db.query();
             } else {
                 let handleSignUpErrorHtmlStream = '';
-                handleSignUpErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                handleSignUpErrorHtmlStream = handleSignUpErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-                handleSignUpErrorHtmlStream = handleSignUpErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+                handleSignUpErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                handleSignUpErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                handleSignUpErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
                 res.status(562).end(ejs.render(handleSignUpErrorHtmlStream, {
                                                                 'title' : '업무관리 프로그램',
@@ -205,9 +205,9 @@ const HandleSignup = (req, res) => {
 const GetFindIdPage = (req, res) => {
     let findIdPageHtmlStream = ''; 
 
-    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/find_id.ejs','utf8'); 
-    findIdPageHtmlStream = findIdPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    findIdPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findIdPageHtmlStream += fs.readFileSync(__dirname + '/../views/find_id.ejs','utf8'); 
+    findIdPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(findIdPageHtmlStream, {
@@ -220,12 +220,12 @@ const GetFindIdPage = (req, res) => {
 */
 const HandleFindId = (req, res) => {
     //console.log("ID 찾기 POST 요청 보냄");
-    let sql_str = "SELECT user_id FROM USER WHERE phonenum = ? and user_name = ?";
+    let sql_str = "SELECT user_id FROM USER WHERE phonenum=? AND user_name=?";
     let body = req.body;
     let phonenum = body.phone;
     let username = body.uname;
 
-    let resultHtmlPageStream = '';
+    let findIdResultPageHTMLStream = '';
     let handleFindIdErrorHtmlStream = '';
 
     db.query(sql_str, [phonenum, username], (error, results) => {
@@ -238,24 +238,24 @@ const HandleFindId = (req, res) => {
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
-                handleFindIdErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                handleFindIdErrorHtmlStream = handleFindIdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-                handleFindIdErrorHtmlStream = handleFindIdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                handleFindIdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                handleFindIdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                handleFindIdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.status(562).end(ejs.render(handleFindIdErrorHtmlStream, {
                                                                             'title' : '업무관리 프로그램',
                                                                             'url'   : '../../',
                                                                             'error' : '아이디 찾기를 처리하는 도중'})); 
             } else {
-                resultHtmlPageStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                resultHtmlPageStream = resultHtmlPageStream + fs.readFileSync(__dirname + '/../views/result_find_id.ejs','utf8'); 
-                resultHtmlPageStream = resultHtmlPageStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                findIdResultPageHTMLStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                findIdResultPageHTMLStream += fs.readFileSync(__dirname + '/../views/result_find_id.ejs','utf8'); 
+                findIdResultPageHTMLStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                res.end(ejs.render( resultHtmlPageStream, {
-                    'title' : 'ID 찾기',
-                    'url'   : '../',
-                    'userid': results[0].user_id}));
+                res.end(ejs.render( findIdResultPageHTMLStream, {
+                                                                'title' : '아이디 찾기',
+                                                                'url'   : '../',
+                                                                'userid': results[0].user_id}));
             }              
         }
     });
@@ -267,9 +267,9 @@ const HandleFindId = (req, res) => {
 const GetFindPwdPage = (req, res) => {
     let findPwdPageHtmlStream = ''; 
 
-    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/find_pwd.ejs','utf8'); 
-    findPwdPageHtmlStream = findPwdPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+    findPwdPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+    findPwdPageHtmlStream += fs.readFileSync(__dirname + '/../views/find_pwd.ejs','utf8'); 
+    findPwdPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
     res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
     res.end(ejs.render(findPwdPageHtmlStream, {
@@ -283,12 +283,12 @@ const GetFindPwdPage = (req, res) => {
 // Password를 찾기위해 데이터를 입력 시 바로 변경 페이지로 이동합니다.
 const GetAlterPwdPage = (req, res) => {
     //console.log("비밀번호 변경 POST 요청 보냄");
-    let sql_str = "SELECT * FROM USER WHERE phonenum = ? and user_id = ? and question = ? and answer = ?";
-    let body = req.body;
-    let phonenum = body.phone;
-    let userid = body.uid;
-    let question = body.question;
-    let answer = body.answer;
+    let sql_str     = "SELECT * FROM USER WHERE phonenum=? AND user_id=? AND question=? AND answer=?";
+    let body        = req.body;
+    let phonenum    = body.phone;
+    let userid      = body.uid;
+    let question    = body.question;
+    let answer      = body.answer;
 
     let pwdChangeResulPageHtmlStream = '';
     let changePwdPageErrorHtmlStream = '';
@@ -303,18 +303,18 @@ const GetAlterPwdPage = (req, res) => {
 
             // 입력받은 데이터가 DB에 존재하는지 판단합니다. 
             if (results[0] == null) {
-                changePwdPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                changePwdPageErrorHtmlStream = changePwdPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-                changePwdPageErrorHtmlStream = changePwdPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                changePwdPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                changePwdPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+                changePwdPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.status(562).end(ejs.render(changePwdPageErrorHtmlStream, {
                                                                             'title' : '업무관리 프로그램',
                                                                             'url'   : '../../',
                                                                             'error' : '비밀번호 변경 페이지를 출력하는 도중'})); 
             } else {
-                pwdChangeResulPageHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-                pwdChangeResulPageHtmlStream = pwdChangeResulPageHtmlStream + fs.readFileSync(__dirname + '/../views/change_pwd.ejs','utf8'); 
-                pwdChangeResulPageHtmlStream = pwdChangeResulPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                pwdChangeResulPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+                pwdChangeResulPageHtmlStream += fs.readFileSync(__dirname + '/../views/change_pwd.ejs','utf8'); 
+                pwdChangeResulPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(pwdChangeResulPageHtmlStream, {
@@ -331,10 +331,10 @@ const GetAlterPwdPage = (req, res) => {
 */
 const HandleAlterPwd = (req, res) => {
     //console.log("비밀번호 변경 PUT 요청 보냄");
-    let sql_str = "UPDATE USER SET user_pwd = ? WHERE user_id = ?";
-    let body = req.body;
-    let userid = body.uid;
-    let password = body.pass;
+    let sql_str     = "UPDATE USER SET user_pwd=? WHERE user_id=?";
+    let body        = req.body;
+    let userid      = body.uid;
+    let password    = body.pass;
 
     let HandleChangePwdErrorHtmlStream = '';
 
@@ -342,9 +342,9 @@ const HandleAlterPwd = (req, res) => {
     db.query(sql_str, [password, userid], (error, results) => {
         if (error) {     
             console.log(error);
-            HandleChangePwdErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-            HandleChangePwdErrorHtmlStream = HandleChangePwdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-            HandleChangePwdErrorHtmlStream = HandleChangePwdErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+            HandleChangePwdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+            HandleChangePwdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+            HandleChangePwdErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
             res.status(562).end(ejs.render(HandleChangePwdErrorHtmlStream, {
                                                                             'title' : '업무관리 프로그램',
                                                                             'url'   : '../../',

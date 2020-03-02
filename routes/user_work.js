@@ -3,7 +3,7 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   bodyParser  = require('body-parser');
-const   url = require('url');
+const   url         = require('url');
 //const   session     = require('express-session');
 const   router      = express.Router();
 const   moment      = require('moment');
@@ -32,22 +32,22 @@ const GetInquireWorkSheet = (req, res) => {
     if (req.session.userid) {
         
         // 주업무 데이터를 가져오는 쿼리문
-        let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id = ?";
-        let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id = ?";
-        let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
+        let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id=?";
+        let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id=?";
+        let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id=?";
 
         // 부업무 데이터를 가져오는 쿼리문
-        let sub_last_sql_str    = "SELECT * FROM SUB_LAST_WORK WHERE user_id = ?";
-        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
-        let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
+        let sub_last_sql_str    = "SELECT * FROM SUB_LAST_WORK WHERE user_id=?";
+        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id=?";
+        let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id=?";
 
 
-        let inquirePageHtmlStream      = '';
+        let inquirePageHtmlStream = '';
     
-        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
-        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
-        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
-        inquirePageHtmlStream = inquirePageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        inquirePageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+        inquirePageHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');     
+        inquirePageHtmlStream += fs.readFileSync(__dirname + '/../views/inquire_worksheet.ejs','utf8'); 
+        inquirePageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
         let last_result, this_result, future_result, sub_last_result, sub_this_result, sub_future_result;
@@ -149,13 +149,13 @@ const GetInquireWorkSheet = (req, res) => {
         }); 
     } else {
         let inquirePageErrorHtmlStream = '';
-        inquirePageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        inquirePageErrorHtmlStream = inquirePageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        inquirePageErrorHtmlStream = inquirePageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        inquirePageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        inquirePageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        inquirePageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
         res.status(562).end(ejs.render(inquirePageErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'error' : '업무 조회 페이지를 출력하는 도중'}));  
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'error' : '업무 조회 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -169,11 +169,11 @@ const  GetThisWorkSheet = (req, res) => {
         let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id = ?";
         let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
 
-        let thisWorkPagehtmlStream          = '';
+        let thisWorkPagehtmlStream = '';
     
-        thisWorkPagehtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
-        thisWorkPagehtmlStream = thisWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');       
-        thisWorkPagehtmlStream = thisWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
+        thisWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');  
+        thisWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');       
+        thisWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/today_worksheet.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); 
 
@@ -213,8 +213,7 @@ const  GetThisWorkSheet = (req, res) => {
                                                             'title'         :'업무관리 프로그램',
                                                             'url'           :'../../',
                                                             thisWork        :this_work,
-                                                            sub_thisWork    :sub_this_work
-                 })); 
+                                                            sub_thisWork    :sub_this_work})); 
                 callback(null);
             }
         ], function(error, result) {
@@ -223,9 +222,9 @@ const  GetThisWorkSheet = (req, res) => {
         });
     } else {
         let thisWorkPageErrorHtmlStream = '';
-        thisWorkPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        thisWorkPageErrorHtmlStream = thisWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        thisWorkPageErrorHtmlStream = thisWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        thisWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        thisWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        thisWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(thisWorkPageErrorHtmlStream, {
                                                         'title' : '업무관리 프로그램',
@@ -241,26 +240,24 @@ const HandleThisWorkSheet = (req, res) => {
     if (req.session.userid) {
         console.log('금주 업무 등록 요청보냄');
         // 주업무 등록하는 쿼리문
-        let user_sql_str = 'SELECT * FROM USER WHERE user_id = ?';
-        let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id = ?';
-        let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
-        let sql_str3 = 'UPDATE THIS_WORK SET work = ? WHERE user_id = ?';
+        let user_sql_str = 'SELECT * FROM USER WHERE user_id=?';
+        let sql_str1 = 'SELECT * FROM THIS_WORK WHERE user_id=?';
+        let sql_str2 = 'INSERT INTO THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)';
+        let sql_str3 = 'UPDATE THIS_WORK SET work=? WHERE user_id=?';
 
         // 부업무 등록하는 쿼리문
-        let sub_sql_str1 = 'SELECT * FROM SUB_THIS_WORK WHERE user_id = ?';
-        let sub_sql_str2 = 'INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
-        let sub_sql_str3 = 'UPDATE SUB_THIS_WORK SET work = ? WHERE user_id = ?';
+        let sub_sql_str1 = 'SELECT * FROM SUB_THIS_WORK WHERE user_id=?';
+        let sub_sql_str2 = 'INSERT INTO SUB_THIS_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)';
+        let sub_sql_str3 = 'UPDATE SUB_THIS_WORK SET work=? WHERE user_id=?';
 
-        let body = req.body;
-        let userid = req.session.userid;
-        let username;
-        let start_date, end_date;
-        let today = moment().day();
-        let work = body.work;
-        let sub_work = body.sub_work;
-
-        start_date = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
-        end_date = moment().add((6 - today), 'days').format("YYYY-MM-DD");
+        let body        = req.body;
+        let userid      = req.session.userid;
+        let username    = '';
+        let start_date  = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
+        let end_date    = moment().add((6 - today), 'days').format("YYYY-MM-DD");
+        let today       = moment().day();
+        let work        = body.work;
+        let sub_work    = body.sub_work;
 
         async.waterfall([
             function(callback) {
@@ -337,17 +334,15 @@ const HandleThisWorkSheet = (req, res) => {
             if (error)
                 console.log(error);
         });
-        // 금주 업무 등록이 되어있는지 조사합니다.
-        
     } else {
         let HandleThisWorkErrorHtmlStream = '';
-        HandleThisWorkErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        HandleThisWorkErrorHtmlStream = HandleThisWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        HandleThisWorkErrorHtmlStream = HandleThisWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        HandleThisWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        HandleThisWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        HandleThisWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
         
         res.status(562).end(ejs.render(HandleThisWorkErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'error' : '금주 업무를 등록하는 도중'}));   
+                                                                        'title' : '업무관리 프로그램',
+                                                                        'error' : '금주 업무를 등록하는 도중'}));   
     }
 };
 
@@ -362,9 +357,9 @@ const  GetFutureWorkSheet = (req, res) => {
 
         let futureWorkPagehtmlStream = '';
     
-        futureWorkPagehtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
-        futureWorkPagehtmlStream = futureWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-        futureWorkPagehtmlStream = futureWorkPagehtmlStream + fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); 
+        futureWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');   
+        futureWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+        futureWorkPagehtmlStream += fs.readFileSync(__dirname + '/../views/future_worksheet.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'});
 
@@ -377,7 +372,7 @@ const  GetFutureWorkSheet = (req, res) => {
                         console.log(error);
                         res.end("error");
                     } else {
-                        if(results.length <= 0)
+                        if (results.length <= 0)
                             futureWork = null;
                         else 
                             futureWork = results[0].work;
@@ -385,7 +380,7 @@ const  GetFutureWorkSheet = (req, res) => {
                     callback(null);
                 });
             },
-            function(callback){
+            function(callback) {
                 db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
                     if (error) {
                         console.log(error);
@@ -401,10 +396,10 @@ const  GetFutureWorkSheet = (req, res) => {
             },
             function(callback) {
                 res.end(ejs.render(futureWorkPagehtmlStream, {
-                                                            'title'         :'업무관리 프로그램',
-                                                            'url'           :'../../',
-                                                            futureWork      :futureWork,
-                                                            sub_futureWork  :sub_futureWork})); 
+                                                                'title'         :'업무관리 프로그램',
+                                                                'url'           :'../../',
+                                                                futureWork      :futureWork,
+                                                                sub_futureWork  :sub_futureWork})); 
                 callback(null);
             }
         ],  function(error, result) {
@@ -413,14 +408,14 @@ const  GetFutureWorkSheet = (req, res) => {
         });
     } else {
         let futureWorkPageErrorHtmlStream = '';
-        futureWorkPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        futureWorkPageErrorHtmlStream = futureWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        futureWorkPageErrorHtmlStream = futureWorkPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        futureWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        futureWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        futureWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(futureWorkPageErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../',
-                                                        'error' : '예정된 업무 페이지를 출력하는 도중'}));  
+                                                                        'title' : '업무관리 프로그램',
+                                                                        'url'   : '../../',
+                                                                        'error' : '예정된 업무 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -431,26 +426,25 @@ const HandleFutureWorkSheet = (req, res) => {
 
     if (req.session.userid) {
         console.log('예정된 업무 등록 요청보냄');
-        let user_sql_str = 'SELECT * FROM USER WHERE user_id = ?';
-        let sql_str1 = 'SELECT * FROM FUTURE_WORK WHERE user_id = ?';
-        let sql_str2 = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
-        let sql_str3 = 'UPDATE FUTURE_WORK SET work = ? WHERE user_id = ?';
+        let user_sql_str = 'SELECT * FROM USER WHERE user_id=?';
+        let sql_str1     = 'SELECT * FROM FUTURE_WORK WHERE user_id=?';
+        let sql_str2     = 'INSERT INTO FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)';
+        let sql_str3     = 'UPDATE FUTURE_WORK SET work=? WHERE user_id=?';
 
-        let sub_sql_str1 = 'SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?';
-        let sub_sql_str2 = 'INSERT INTO SUB_FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?,?,?,?,?)';
-        let sub_sql_str3 = 'UPDATE SUB_FUTURE_WORK SET work = ? WHERE user_id = ?';
+        let sub_sql_str1 = 'SELECT * FROM SUB_FUTURE_WORK WHERE user_id=?';
+        let sub_sql_str2 = 'INSERT INTO SUB_FUTURE_WORK(start_date, end_date, user_id, user_name, work) VALUES(?, ?, ?, ?, ?)';
+        let sub_sql_str3 = 'UPDATE SUB_FUTURE_WORK SET work=? WHERE user_id=?';
         
         
-        let body = req.body;
-        let userid = req.session.userid;
-        let username;
-        let start_date, end_date;
-        let today = moment().day();
-        let work = body.work;
-        let sub_work = body.sub_work;
+        let body        = req.body;
+        let userid      = req.session.userid;
+        let username    = '';
+        let start_date  = moment().add(6 - today, 'days').format("YYYY-MM-DD");
+        let end_date    = moment().add(13 - today, 'days').format("YYYY-MM-DD");
+        let today       = moment().day();
+        let work        = body.work;
+        let sub_work    = body.sub_work;
 
-        start_date = moment().add(6 - today, 'days').format("YYYY-MM-DD");
-        end_date = moment().add(13 - today, 'days').format("YYYY-MM-DD");
 
         async.waterfall([
             function(callback) {
@@ -532,14 +526,14 @@ const HandleFutureWorkSheet = (req, res) => {
         });
     } else {
         let handleFutureWorkErrorHtmlStream = '';
-        handleFutureWorkErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        handleFutureWorkErrorHtmlStream = handleFutureWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        handleFutureWorkErrorHtmlStream = handleFutureWorkErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        handleFutureWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        handleFutureWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        handleFutureWorkErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(handleFutureWorkErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../',
-                                                        'error' : '예정된 업무 등록을 처리하는 도중'}));  
+                                                                        'title' : '업무관리 프로그램',
+                                                                        'url'   : '../../',
+                                                                        'error' : '예정된 업무 등록을 처리하는 도중'}));  
     }
 };
 
@@ -547,13 +541,13 @@ const HandleFutureWorkSheet = (req, res) => {
     키워드 검색 페이지를 출력합니다.
 */
 const GetSearchPage = (req, res) => {
-    if(req.session.userid){
+    if (req.session.userid) {
         let searchBarHtmlStream = ''; 
 
-        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
-        searchBarHtmlStream = searchBarHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+        searchBarHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+        searchBarHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+        searchBarHtmlStream += fs.readFileSync(__dirname + '/../views/search_bar.ejs','utf8'); 
+        searchBarHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
         res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
         res.end(ejs.render(searchBarHtmlStream, {
@@ -561,14 +555,14 @@ const GetSearchPage = (req, res) => {
                                                 'url'   : '../'}));
     } else {
         let searchBarPageErrorHtmlStream = '';
-        searchBarPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        searchBarPageErrorHtmlStream = searchBarPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        searchBarPageErrorHtmlStream = searchBarPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        searchBarPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        searchBarPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        searchBarPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(searchBarPageErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../',
-                                                        'error' : '키워드 검색 페이지를 출력하는 도중'}));  
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'url'   : '../../',
+                                                                    'error' : '키워드 검색 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -576,14 +570,14 @@ const GetSearchPage = (req, res) => {
     키워드 검색을 처리합니다.
 */
 const HandleSearch = (req, res) => {
-    if(req.session.userid){
+    if (req.session.userid) {
         const   query           = url.parse(req.url, true).query;
         let     search          = query.search;
         let     last_results;
         let     sub_last_results;
 
-        let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work like '%" + search + "%';"
-        let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work like '%" + search + "%';"
+        let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE '%" + search + "%';"
+        let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE '%" + search + "%';"
         // 테스트 코드
         //console.log(query);
         async.waterfall([
@@ -612,10 +606,10 @@ const HandleSearch = (req, res) => {
             function(callback) {
                 let searchResultHtmlStream = ''; 
 
-                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
-                searchResultHtmlStream = searchResultHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(searchResultHtmlStream, {
@@ -632,14 +626,14 @@ const HandleSearch = (req, res) => {
         
     } else {
         let handleSearchErrorHtmlStream = '';
-        handleSearchErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        handleSearchErrorHtmlStream = handleSearchErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        handleSearchErrorHtmlStream = handleSearchErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        handleSearchErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        handleSearchErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        handleSearchErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(handleSearchErrorHtmlStream, {
-                                                        'title' : '업무관리 프로그램',
-                                                        'url'   : '../../',
-                                                        'error' : '키워드 검색을 처리하는 도중'}));  
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'url'   : '../../',
+                                                                    'error' : '키워드 검색을 처리하는 도중'}));  
     }
 };
 
@@ -658,10 +652,10 @@ const GetLogPage = (req, res) => {
                 //console.log(results);
                 let logPageHtmlStream = ''; 
 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
-                logPageHtmlStream = logPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                logPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logPageHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                logPageHtmlStream += fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
+                logPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
     
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(logPageHtmlStream, {
@@ -672,14 +666,14 @@ const GetLogPage = (req, res) => {
         }); // db.query();
     } else {
         let logPageErrorHtmlStream = '';
-        logPageErrorHtmlStream = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        logPageErrorHtmlStream = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        logPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        logPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        logPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(logPageErrorHtmlStream, {
-                                                        'title' : 'Error',
-                                                        'url'   : '../../',
-                                                        'error' : '전체 로그 페이지를 출력하는 도중'}));  
+                                                                'title' : 'Error',
+                                                                'url'   : '../../',
+                                                                'error' : '전체 로그 페이지를 출력하는 도중'}));  
     }
 };
 
@@ -689,7 +683,7 @@ const GetSearchLog = (req, res) => {
     if (req.session.userid) {
         const   query   = url.parse(req.url, true).query;
         let     logid   = query.log_id;
-        let     sql_str = "SELECT * FROM LOGIN_LOG WHERE user_name = ?;";
+        let     sql_str = "SELECT * FROM LOGIN_LOG WHERE user_name=?;";
 
         db.query(sql_str, [logid], (error, results) => {
             if (error) {
@@ -698,10 +692,10 @@ const GetSearchLog = (req, res) => {
             } else {
                 let logResultPageHtmlStream = ''; 
 
-                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
-                logResultPageHtmlStream = logResultPageHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                logResultPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                logResultPageHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                logResultPageHtmlStream += fs.readFileSync(__dirname + '/../views/log.ejs','utf8'); 
+                logResultPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
     
                 res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
                 res.end(ejs.render(logResultPageHtmlStream, {
@@ -714,9 +708,9 @@ const GetSearchLog = (req, res) => {
     } else {
         let logPageErrorHtmlStream = '';
 
-        logPageErrorHtmlStream  = fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
-        logPageErrorHtmlStream  = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
-        logPageErrorHtmlStream  = logPageErrorHtmlStream + fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+        logPageErrorHtmlStream  += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        logPageErrorHtmlStream  += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        logPageErrorHtmlStream  += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
 
         res.status(562).end(ejs.render(logPageErrorHtmlStream, {
                                                         'title' : 'Error',
