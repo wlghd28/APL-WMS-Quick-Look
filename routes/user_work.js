@@ -21,7 +21,8 @@ const db = mysql.createConnection({
     user:       'root',             // DB접속 아이디
     password:   'root',             // DB암호
     database:   'work_management',  //사용할 DB명
-    dateStrings:'date'
+    dateStrings:'date',
+    multipleStatements: true
 });
 
 /* 
@@ -32,14 +33,14 @@ const GetInquireWorkSheet = (req, res) => {
     if (req.session.userid) {
         
         // 주업무 데이터를 가져오는 쿼리문
-        let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id=?";
-        let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id=?";
-        let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id=?";
+        let last_sql_str    = "SELECT * FROM LAST_WORK WHERE user_id=?;";
+        let this_sql_str    = "SELECT * FROM THIS_WORK WHERE user_id=?;";
+        let future_sql_str  = "SELECT * FROM FUTURE_WORK WHERE user_id=?;";
 
         // 부업무 데이터를 가져오는 쿼리문
-        let sub_last_sql_str    = "SELECT * FROM SUB_LAST_WORK WHERE user_id=?";
-        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id=?";
-        let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id=?";
+        let sub_last_sql_str    = "SELECT * FROM SUB_LAST_WORK WHERE user_id=?;";
+        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id=?;";
+        let sub_future_sql_str  = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id=?;";
 
 
         let inquirePageHtmlStream = '';
@@ -52,86 +53,29 @@ const GetInquireWorkSheet = (req, res) => {
 
         let last_result, this_result, future_result, sub_last_result, sub_this_result, sub_future_result;
 
-        // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함
-        async.waterfall([
-            function(callback) {
-                db.query(last_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else 
-                        last_result = results;
-                    callback(null);
-                });
-            },
-            function(callback){
-                db.query(sub_last_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else 
-                        sub_last_result = results;
-                    callback(null);
-                });
-            },
-            function(callback){
-                db.query(this_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            this_result = null;
-                        else 
-                            this_result = results[0].work; // results는 배열로 받아온다. work는 this_work 테이블 내의 컬럼명.
-                        callback(null);
-                    }
-                });
-            },
-            function(callback){
-                db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            sub_this_result = null;
-                        else 
-                            sub_this_result = results[0].work;
-                        callback(null);
-                    }
-                });
-            },
-            function(callback){
-                db.query(future_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0) 
-                            future_result = null;
-                        else 
-                            future_result = results[0].work;
-                        callback(null);
-                    }
-                   
-                });
-            },
-            function(callback){
-                db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0) 
-                            sub_future_result = null;
-                        else
-                            sub_future_result = results[0].work;
-                        callback(null);
-                    }
-                });
-            },
-            function(callback) {
+        // 지난업무, 금주업무, 예정업무 동기화 처리를 하기 위함(SELECT문에만 async.waterfall을 사용하지 않고 mysql 다중쿼리 처리함)
+        db.query(last_sql_str + sub_last_sql_str + this_sql_str + sub_this_sql_str + future_sql_str + sub_future_sql_str, 
+            [req.session.userid, req.session.userid, req.session.userid, req.session.userid, req.session.userid, req.session.userid], (error, results) => {
+            if (error) {
+                console.log(error);
+                res.end("error");
+            } else {
+                if (results[2].length <= 0) 
+                    this_result = null;
+                if (results[3].length <= 0)
+                    sub_this_result = null;
+                if (results[4].length <= 0)
+                    future_result = null;
+                if (results[5].length <= 0)
+                    sub_future_result = null;
+
+                last_result         = results[0]; 
+                sub_last_result     = results[1];
+                this_result         = results[2][0].work; // results는 배열로 받아온다. work는 this_work 테이블 내의 컬럼명.
+                sub_this_result     = results[3][0].work;
+                future_result       = results[4][0].work;
+                sub_future_result   = results[5][0].work;
+
                 res.end(ejs.render(inquirePageHtmlStream, {
                                                             'title'         :'업무관리 프로그램',
                                                             'url'           :'../../',
@@ -141,12 +85,8 @@ const GetInquireWorkSheet = (req, res) => {
                                                             sub_lastWork    :sub_last_result,
                                                             'sub_thisWork'  :sub_this_result,
                                                             'sub_futureWork':sub_future_result}));
-                callback(null);
             }
-        ], function(error, results) {
-            if (error)
-                console.log(error);
-        }); 
+        });
     } else {
         let inquirePageErrorHtmlStream = '';
         inquirePageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
@@ -166,8 +106,8 @@ const  GetThisWorkSheet = (req, res) => {
     
     // 로그인에 성공했을 경우에만 업무 등록을 할 수 있음
     if (req.session.userid) {
-        let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id = ?";
-        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id = ?";
+        let this_sql_str        = "SELECT * FROM THIS_WORK WHERE user_id=?;";
+        let sub_this_sql_str    = "SELECT * FROM SUB_THIS_WORK WHERE user_id=?;";
 
         let thisWorkPagehtmlStream = '';
     
@@ -179,46 +119,24 @@ const  GetThisWorkSheet = (req, res) => {
 
         let this_work, sub_this_work;
 
-        async.waterfall([
-            function(callback) {
-                db.query(this_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            this_work = null;
-                        else 
-                            this_work = results[0].work;
-                        callback(null);
-                    }
-                });
-            },
-            function(callback) {
-                db.query(sub_this_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {    
-                        if (results.length <= 0)
-                            sub_this_work = null;
-                        else
-                            sub_this_work = results[0].work;
-                        callback(null);         
-                    }
-                });
-            },
-            function(callback) {
+        db.query(this_sql_str + sub_this_sql_str, [req.session.userid, req.session.userid], (error, results) => {
+            if (error) {
+                console.log(error);
+                res.end("error");
+            } else {
+                if (results.length[0] <= 0)
+                    this_work = null;
+                if (results.length[1] <= 0)
+                    sub_this_work = null;
+                this_work       = results[0][0].work;
+                sub_this_work   = results[1][0].work;
+
                 res.end(ejs.render(thisWorkPagehtmlStream, {
                                                             'title'         :'업무관리 프로그램',
                                                             'url'           :'../../',
                                                             thisWork        :this_work,
                                                             sub_thisWork    :sub_this_work})); 
-                callback(null);
             }
-        ], function(error, result) {
-            if (error)
-                console.log(error);
         });
     } else {
         let thisWorkPageErrorHtmlStream = '';
@@ -253,9 +171,9 @@ const HandleThisWorkSheet = (req, res) => {
         let body        = req.body;
         let userid      = req.session.userid;
         let username    = '';
+        let today       = moment().day();
         let start_date  = moment().add((-1) * today, 'days').format("YYYY-MM-DD");
         let end_date    = moment().add((6 - today), 'days').format("YYYY-MM-DD");
-        let today       = moment().day();
         let work        = body.work;
         let sub_work    = body.sub_work;
 
@@ -352,8 +270,8 @@ const HandleThisWorkSheet = (req, res) => {
 const  GetFutureWorkSheet = (req, res) => {   
     
     if (req.session.userid) {
-        let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id = ?";
-        let sub_future_sql_str = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id = ?";
+        let future_sql_str = "SELECT * FROM FUTURE_WORK WHERE user_id=?;";
+        let sub_future_sql_str = "SELECT * FROM SUB_FUTURE_WORK WHERE user_id=?;";
 
         let futureWorkPagehtmlStream = '';
     
@@ -365,47 +283,27 @@ const  GetFutureWorkSheet = (req, res) => {
 
         let futureWork, sub_futureWork;
 
-        async.waterfall([
-            function(callback) {
-                db.query(future_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            futureWork = null;
-                        else 
-                            futureWork = results[0].work;
-                    }
-                    callback(null);
-                });
-            },
-            function(callback) {
-                db.query(sub_future_sql_str, [req.session.userid], (error, results) => {
-                    if (error) {
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                        if (results.length <= 0)
-                            sub_futureWork = null;
-                        else 
-                            sub_futureWork = results[0].work;
-                    }
-                    callback(null);
-                });
-            },
-            function(callback) {
+        db.query(future_sql_str + sub_future_sql_str, [req.session.userid, req.session.userid], (error, results) => {
+            if (error) {
+                console.log(error);
+                res.end("error");
+            } else {
+                if (results.length[0] <= 0)
+                    futureWork = null;
+                if (results.length[1] <= 0)
+                    sub_futureWork = null;
+                
+                futureWork      = results[0][0].work;
+                sub_futureWork  = results[1][0].work;
+
                 res.end(ejs.render(futureWorkPagehtmlStream, {
                                                                 'title'         :'업무관리 프로그램',
                                                                 'url'           :'../../',
                                                                 futureWork      :futureWork,
                                                                 sub_futureWork  :sub_futureWork})); 
-                callback(null);
             }
-        ],  function(error, result) {
-            if (error)
-                console.log(error);
         });
+        
     } else {
         let futureWorkPageErrorHtmlStream = '';
         futureWorkPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
@@ -439,9 +337,9 @@ const HandleFutureWorkSheet = (req, res) => {
         let body        = req.body;
         let userid      = req.session.userid;
         let username    = '';
+        let today       = moment().day();
         let start_date  = moment().add(6 - today, 'days').format("YYYY-MM-DD");
         let end_date    = moment().add(13 - today, 'days').format("YYYY-MM-DD");
-        let today       = moment().day();
         let work        = body.work;
         let sub_work    = body.sub_work;
 
@@ -578,52 +476,32 @@ const HandleSearch = (req, res) => {
 
         let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE '%" + search + "%';"
         let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE '%" + search + "%';"
-        // 테스트 코드
+
         //console.log(query);
-        async.waterfall([
-            function(callback) {
-                db.query(sql_str1, (error, results) => {
+                db.query(sql_str1 + sql_str2, (error, results) => {
                     if (error) {
                         res.end("error");
                         console.log(error);
                     } else {
-                        last_results = results;
-                        callback(null);
+                        last_results        = results[0];
+                        sub_last_results    = results[1];
+
+                        let searchResultHtmlStream = ''; 
+
+                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
+                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+                        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                        res.end(ejs.render(searchResultHtmlStream, {
+                                                                    'title' : '키워드 검색결과',
+                                                                    'url'   : '../',
+                                                                    lastWork : last_results,
+                                                                    sub_lastWork : sub_last_results}));
                     }
                 }); // db.query();
-            },
-            function(callback){
-                db.query(sql_str2, (error, results) => {
-                    if (error) {
-                        res.end("error");
-                        console.log(error);
-                    } else {
-                        sub_last_results = results;
-                        callback(null);
-                    }
-                }); // db.query();
-            },
-            function(callback) {
-                let searchResultHtmlStream = ''; 
-
-                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
-                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
-
-                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                res.end(ejs.render(searchResultHtmlStream, {
-                                                            'title' : '키워드 검색결과',
-                                                            'url'   : '../',
-                                                            lastWork : last_results,
-                                                            sub_lastWork : sub_last_results}));
-                callback(null);
-            }
-        ],  function(error, result) {
-            if (error)
-                console.log(error);
-        });
-        
+                
     } else {
         let handleSearchErrorHtmlStream = '';
         handleSearchErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
