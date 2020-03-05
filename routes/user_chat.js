@@ -4,7 +4,7 @@ const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   router      = express.Router();
 const   moment      = require('moment');
-const   globaldata  = require('../server'); // 포트번호와 ip주소 데이터를 전역변수로 쓰기 위함.
+const   globalData  = require('../server'); // 포트번호와 ip주소 데이터를 전역변수로 쓰기 위함.
 require('moment-timezone');
 
 /* 
@@ -23,7 +23,7 @@ const db = mysql.createConnection({
 */
 const GetChatPage = (req, res) => {
     if (req.session.userid) {
-        let ip_address  = globaldata.ip + ':' + globaldata.PORT;
+        let ip_address  = globalData.ip + ':' + globalData.PORT;
         let sql_str     = "SELECT * FROM USER WHERE user_id=?;";
         let userid      = req.session.userid; 
         let username    = '';

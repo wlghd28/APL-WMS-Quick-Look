@@ -29,7 +29,7 @@
     var socket = io('http://<%=ip_address%>');
 
     /*
-        접속되었을 때 실행
+        접속되었을 때 실행(순서 1-1, 접속했을 때 알림을 의미)
     */
     socket.on('connect', function() {
         var name = prompt('이름을 입력해주세요! ', '');
@@ -43,9 +43,9 @@
     });
 
     /*
-        새로운 유저 알림
+        새로운 유저 알림(순서 1-3)
     */
-        socket.on('connectNotice', function(connectNotice) {
+        socket.on('connectNotice', function(connectNotice) { // connectNotice에 'socket.name님이 접속했습니다.'가 들어있는 상태
             var $connect_notice_div = $(`<div style="color: green;"><strong>${connectNotice}</strong></div>`);
 
             $('#messages')
@@ -55,7 +55,7 @@
         });
 
     /*
-        나가는 유저 알림
+        나가는 유저 알림(순서 3-1, 나갔을 때 알림을 의미)
     */
         socket.on('disconnectNotice', function(disconnectNotice) {
             var $disconnect_notice_div = $(`<div style="color: red;"><strong>${disconnectNotice}</strong></div>`);
@@ -67,9 +67,9 @@
         });
 
     /*
-        서버로부터 메세지가 수신됐을 때(보낸 사람만)
+        서버로부터 메세지가 수신됐을 때(보낸 사람만) (순서 2-4)
     */
-    socket.on('sendmsg', function(chatData){ 
+    socket.on('sendMsg', function(chatData) { 
 
         //보낸 메세지
         var $outgoing_msg_div       = $(`<div class="outgoing_msg"></div>`);
@@ -88,9 +88,9 @@
     });
 
     /*
-        서버로부터 메세지가 수신됐을 때(보낸 사람을 제외한 모든 사람)
+        서버로부터 메세지가 수신됐을 때(보낸 사람을 제외한 모든 사람) (순서 2-5)
     */
-    socket.on('sendmsg_broadcast', function(chatData){
+    socket.on('sendMsg_broadcast', function(chatData) {
 
         // 받은 메세지
         var $incoming_msg_div       = $(`<div class="incoming_msg"></div>`);
@@ -127,7 +127,7 @@
             time        : $('#time').val()
         };
 
-        socket.emit('sendmsg', chatData);
+        socket.emit('sendMsg', chatData); // 순서(2-1, 메세지를 보냈을 때 의미) 
         $('#msg').val('');
         return false;
     });

@@ -72,10 +72,11 @@ http.listen(PORT, function () {
     채팅 socket.io 서버 실행
 */
 io.on('connection', function(socket) {
-    // 새로운 유저가 접속했을 경우 기존에 존재하던 유저들에게 알려줌 
-    socket.on('newUser', function(name) {
 
-        console.log(name + '님이 접속하셨습니다.');
+    // 새로운 유저가 접속했을 경우 기존에 존재하던 유저들에게 알려줌 (순서 1-2)
+    socket.on('newUser', function(name) { 
+
+        console.log(name + '님이 접속하셨습니다.'); 
 
         // 소켓에 이름 저장해두기
         socket.name = name;
@@ -84,18 +85,18 @@ io.on('connection', function(socket) {
         io.sockets.emit('connectNotice', socket.name + '님이 접속하셨습니다.');
     });
     
-    // 메세지를 보낸 해당 사람에게 전송
-    socket.on('sendmsg', function(chatData) {
-        socket.emit('sendmsg', chatData); 
+    // 메세지를 보낸 해당 사람에게 전송 (순서 2-2)
+    socket.on('sendMsg', function(chatData) {
+        socket.emit('sendMsg', chatData); 
     });
 
-    // 메세지를 보낸 해당 사람을 제외하고 모든사람들에게 전송
-    socket.on('sendmsg', function(chatData) {
-        socket.broadcast.emit('sendmsg_broadcast', chatData); 
+    // 메세지를 보낸 해당 사람을 제외하고 모든사람들에게 전송 (순서2-3)
+    socket.on('sendMsg', function(chatData) {
+        socket.broadcast.emit('sendMsg_broadcast', chatData); 
     });
 
-    // 연결 끊겼을 때
-    socket.on('disconnect', function() {
+    // 연결 끊겼을 때 (순서 3-2)
+    socket.on('disconnect', function() { 
         console.log(socket.name + '님이 나가셨습니다.');
 
         // 나가는 사람을 제외한 나머지 유저에게 메시지 전송
@@ -109,14 +110,13 @@ io.on('connection', function(socket) {
 */
 function getServerIp() {
     var ifaces = os.networkInterfaces();
+    console.log("ifaces: ", ifaces);
     var result = '';
     
-    for (var dev in ifaces) {
-        var alias = 0;
-        ifaces[dev].forEach(function(details) {
+    for (var key in ifaces) {
+        ifaces[key].forEach(function(details, index) {
             if (details.family == 'IPv4' && details.internal === false) {
                 result = details.address;
-                ++alias;
             }
         });
     }
