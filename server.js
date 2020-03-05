@@ -72,11 +72,20 @@ http.listen(PORT, function () {
     채팅 socket.io 서버 실행
 */
 io.on('connection', function(socket) {
-    socket.broadcast.emit('새로운 분이 입장하셨습니다.');
+    // 새로운 유저가 접속했을 경우 기존에 존재하던 유저들에게 알려줌 
+    socket.on('newUser', function(name) {
+
+        console.log(name + '님이 접속하셨습니다.');
+
+        // 소켓에 이름 저장해두기
+        socket.name = name;
+
+        // 모든 유저에게 전송
+        io.sockets.emit('connectNotice', socket.name + '님이 접속하셨습니다.');
+    });
     
     // 메세지를 보낸 해당 사람에게 전송
     socket.on('sendmsg', function(chatData) {
-        console.log(chatData)
         socket.emit('sendmsg', chatData); 
     });
 
@@ -85,9 +94,12 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('sendmsg_broadcast', chatData); 
     });
 
-    // 연결 끊겼을 때(현재 미작동중)
+    // 연결 끊겼을 때
     socket.on('disconnect', function() {
-        console.log(socket.name + '이(가) 나가셨습니다.');
+        console.log(socket.name + '님이 나가셨습니다.');
+
+        // 나가는 사람을 제외한 나머지 유저에게 메시지 전송
+        socket.broadcast.emit('disconnectNotice', socket.name + '님이 나가셨습니다.');
     });   
 });
 

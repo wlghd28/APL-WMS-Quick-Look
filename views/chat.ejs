@@ -29,6 +29,44 @@
     var socket = io('http://<%=ip_address%>');
 
     /*
+        접속되었을 때 실행
+    */
+    socket.on('connect', function() {
+        var name = prompt('이름을 입력해주세요! ', '');
+
+        // 이름을 입력하지 않으면 익명
+        if (!name) 
+            name = '익명';
+
+        // 서버에 새로운 유저가 왔다고 알림
+        socket.emit('newUser', name);
+    });
+
+    /*
+        새로운 유저 알림
+    */
+        socket.on('connectNotice', function(connectNotice) {
+            var $connect_notice_div = $(`<div style="color: green;"><strong>${connectNotice}</strong></div>`);
+
+            $('#messages')
+            .append($connect_notice_div)
+            .stop()
+            .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0); // 메세지가 길어질때 자동으로 스크롤바가 최하단으로 향함
+        });
+
+    /*
+        나가는 유저 알림
+    */
+        socket.on('disconnectNotice', function(disconnectNotice) {
+            var $disconnect_notice_div = $(`<div style="color: red;"><strong>${disconnectNotice}</strong></div>`);
+
+            $('#messages')
+            .append($disconnect_notice_div)
+            .stop()
+            .animate({ scrollTop: $('#messages')[0].scrollHeight }, 0); // 메세지가 길어질때 자동으로 스크롤바가 최하단으로 향함
+        });
+
+    /*
         서버로부터 메세지가 수신됐을 때(보낸 사람만)
     */
     socket.on('sendmsg', function(chatData){ 
@@ -78,7 +116,7 @@
     $('form').submit(function() {
         
         if ($('#msg').val() == '') {
-            alert('메세지를 입력해주세요.');
+            alert('메세지를 입력해주세요.');    
             return false;
         }
 
