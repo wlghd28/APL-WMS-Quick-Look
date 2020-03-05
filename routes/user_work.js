@@ -477,30 +477,29 @@ const HandleSearch = (req, res) => {
         let     sql_str1 = "SELECT * FROM LAST_WORK WHERE work LIKE '%" + search + "%';"
         let     sql_str2 = "SELECT * FROM SUB_LAST_WORK WHERE work LIKE '%" + search + "%';"
 
-        //console.log(query);
-                db.query(sql_str1 + sql_str2, (error, results) => {
-                    if (error) {
-                        res.end("error");
-                        console.log(error);
-                    } else {
-                        last_results        = results[0];
-                        sub_last_results    = results[1];
+        db.query(sql_str1 + sql_str2, (error, results) => {
+            if (error) {
+                res.end("error");
+                console.log(error);
+            } else {
+                last_results        = results[0];
+                sub_last_results    = results[1];
 
-                        let searchResultHtmlStream = ''; 
+                let searchResultHtmlStream = ''; 
 
-                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
-                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
-                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
-                        searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/search_result.ejs','utf8'); 
+                searchResultHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
 
-                        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
-                        res.end(ejs.render(searchResultHtmlStream, {
-                                                                    'title' : '키워드 검색결과',
-                                                                    'url'   : '../',
-                                                                    lastWork : last_results,
-                                                                    sub_lastWork : sub_last_results}));
-                    }
-                }); // db.query();
+                res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+                res.end(ejs.render(searchResultHtmlStream, {
+                                                            'title' : '키워드 검색결과',
+                                                            'url'   : '../',
+                                                            lastWork : last_results,
+                                                            sub_lastWork : sub_last_results}));
+            }
+        }); // db.query();
                 
     } else {
         let handleSearchErrorHtmlStream = '';
@@ -598,14 +597,14 @@ const GetSearchLog = (req, res) => {
 };
 
 
-router.get('/inquire_worksheet', GetInquireWorkSheet);
-router.get('/this_worksheet', GetThisWorkSheet);
-router.get('/future_worksheet', GetFutureWorkSheet);
-router.get('/search', GetSearchPage);
-router.get('/result', HandleSearch);
-router.get('/log', GetLogPage);
-router.get('/logsearch', GetSearchLog);
-router.post('/upload_this_worksheet', HandleThisWorkSheet);
+router.get('/inquire_worksheet',        GetInquireWorkSheet);
+router.get('/this_worksheet',           GetThisWorkSheet);
+router.get('/future_worksheet',         GetFutureWorkSheet);
+router.get('/search',                   GetSearchPage);
+router.get('/result',                   HandleSearch);
+router.get('/log',                      GetLogPage);
+router.get('/logsearch',                GetSearchLog);
+router.post('/upload_this_worksheet',   HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
 
 module.exports = router

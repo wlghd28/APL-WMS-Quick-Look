@@ -13,6 +13,7 @@
                         <input type="text" id="msg" class="write_msg" placeholder="메세지를 입력하세요" autocomplete='off'/>
                         <input type="hidden" id="userid" value=<%=userid%>>
                         <input type="hidden" id="username" value=<%=username%>>
+                        <input type="hidden" id="time" value=<%=time%>>
                         <button class="msg_send_btn">GO</button>
                     </div>
                 </form>
@@ -30,13 +31,13 @@
     /*
         서버로부터 메세지가 수신됐을 때(보낸 사람만)
     */
-    socket.on('sendmsg', function(msg){ 
+    socket.on('sendmsg', function(chatData){ 
 
         //보낸 메세지
         var $outgoing_msg_div       = $(`<div class="outgoing_msg"></div>`);
         var $sent_msg_div           = $(`<div class="sent_msg"></div>`);
-        var $sent_msg_text          = $(`<p class="sent_msg_text">${msg}</p>`);
-        var $sent_time_date         = $(`<span class="time_date sent_time_date"><%=userid%> | <%=username%> | 현재시각 | 날짜</span>`);
+        var $sent_msg_text          = $(`<p class="sent_msg_text">${chatData.msg}</p>`);
+        var $sent_time_date         = $(`<span class="time_date sent_time_date">${chatData.userid} | ${chatData.username} | ${chatData.time} </span>`);
 
         // 보낸 메세지 처리
         $sent_msg_div.append($sent_time_date);
@@ -51,14 +52,14 @@
     /*
         서버로부터 메세지가 수신됐을 때(보낸 사람을 제외한 모든 사람)
     */
-    socket.on('sendmsg_broadcast', function(msg_broadcast, userid, username){
+    socket.on('sendmsg_broadcast', function(chatData){
 
         // 받은 메세지
         var $incoming_msg_div       = $(`<div class="incoming_msg"></div>`);
         var $received_msg_div       = $(`<div class="received_msg"></div>`);
         var $received_withd_msg_div = $(`<div class="received_withd_msg"></div>`);
-        var $reveived_msg_text      = $(`<p class="recevied_msg_text">${msg_broadcast}</p>`);
-        var $received_time_date     = $(`<span class="time_date received_time_date">${userid} | ${username} | 현재시각 | 날짜</span>`);
+        var $reveived_msg_text      = $(`<p class="recevied_msg_text">${chatData.msg}</p>`);
+        var $received_time_date     = $(`<span class="time_date received_time_date">${chatData.userid} | ${chatData.username} | ${chatData.time} </span>`);
 
         // 받은 메세지 처리
         $received_withd_msg_div.append($received_time_date);
@@ -80,7 +81,15 @@
             alert('메세지를 입력해주세요.');
             return false;
         }
-        socket.emit('sendmsg', $('#msg').val(), $('#userid').val(), $('#username').val());
+
+        let chatData = {
+            msg         : $('#msg').val(),
+            userid      : $('#userid').val(),
+            username    : $('#username').val(),
+            time        : $('#time').val()
+        };
+
+        socket.emit('sendmsg', chatData);
         $('#msg').val('');
         return false;
     });

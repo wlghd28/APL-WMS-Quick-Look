@@ -3,7 +3,10 @@ const   express     = require('express');
 const   ejs         = require('ejs');
 const   mysql       = require('mysql');
 const   router      = express.Router();
+const   moment      = require('moment');
 const   globaldata  = require('../server'); // 포트번호와 ip주소 데이터를 전역변수로 쓰기 위함.
+require('moment-timezone');
+
 /* 
     데이터베이스 연동 소스코드 
 */
@@ -19,11 +22,13 @@ const db = mysql.createConnection({
     채팅 화면을 출력합니다.
 */
 const GetChatPage = (req, res) => {
-    if(req.session.userid){
-        let ip_address  = globaldata.ip + ' : ' + globaldata.PORT;
+    if (req.session.userid) {
+        let ip_address  = globaldata.ip + ':' + globaldata.PORT;
         let sql_str     = "SELECT * FROM USER WHERE user_id=?;";
         let userid      = req.session.userid; 
         let username    = '';
+        let date        = new Date();
+        let time        = '';
 
         db.query(sql_str, [userid], (error, results) => {
             if (error) {     
@@ -40,7 +45,7 @@ const GetChatPage = (req, res) => {
                                                                 'error' : '채팅창을 여는 도중 DB'})); 
             } else {
                 username = results[0].user_name;
-
+                time = moment(date).format('YYYY.MM.DD HH:mm:ss'); // 시, 분이 안찍힘; ㅇㄴ;
                 let chatPageHtmlStream = ''; 
 
                 chatPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
@@ -54,6 +59,7 @@ const GetChatPage = (req, res) => {
                                                         'url'       : '../../' ,
                                                         'username'  : username,
                                                         'userid'    : userid,
+                                                        'time'      : time,
                                                         'ip_address': ip_address})); 
             }
         });

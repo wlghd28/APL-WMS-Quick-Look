@@ -44,8 +44,8 @@ const InquireUser = (req, res) => {
 
 };
 
-router.get('/login', GetLoginPage_Admin);
-router.post('login', HandleLogin_Admin);
-router.get('/logout', HandleLogout_Admin);
+router.get('/login',        GetLoginPage_Admin);
+router.post('login',        HandleLogin_Admin);
+router.get('/logout',       HandleLogout_Admin);
 router.get('/inquire_user', InquireUser);
 module.exports = router

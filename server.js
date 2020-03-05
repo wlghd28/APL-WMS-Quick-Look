@@ -75,16 +75,17 @@ io.on('connection', function(socket) {
     socket.broadcast.emit('새로운 분이 입장하셨습니다.');
     
     // 메세지를 보낸 해당 사람에게 전송
-    socket.on('sendmsg', function(msg) {
-        socket.emit('sendmsg', msg); 
+    socket.on('sendmsg', function(chatData) {
+        console.log(chatData)
+        socket.emit('sendmsg', chatData); 
     });
 
     // 메세지를 보낸 해당 사람을 제외하고 모든사람들에게 전송
-    socket.on('sendmsg', function(msg, userid, username) {
-        socket.broadcast.emit('sendmsg_broadcast', msg, userid, username); 
+    socket.on('sendmsg', function(chatData) {
+        socket.broadcast.emit('sendmsg_broadcast', chatData); 
     });
 
-    // 연결 끊겼을 때
+    // 연결 끊겼을 때(현재 미작동중)
     socket.on('disconnect', function() {
         console.log(socket.name + '이(가) 나가셨습니다.');
     });   
