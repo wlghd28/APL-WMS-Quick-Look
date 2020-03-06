@@ -596,6 +596,35 @@ const GetSearchLog = (req, res) => {
     }
 };
 
+/* 
+    지도 검색 페이지를 출력합니다.
+*/
+const GetMapPage = (req, res) => {
+    if (req.session.userid) {
+        let MapPageHtmlStream = ''; 
+
+        MapPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 
+        MapPageHtmlStream += fs.readFileSync(__dirname + '/../views/nav.ejs','utf8');  
+        MapPageHtmlStream += fs.readFileSync(__dirname + '/../views/map.ejs','utf8'); 
+        MapPageHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8'); 
+
+        res.writeHead(200, {'Content-Type':'text/html; charset=utf8'}); // 200은 성공
+        res.end(ejs.render(MapPageHtmlStream, {
+                                                'title' : '지도 검색',
+                                                'url'   : '../'}));
+    } else {
+        let MapPageErrorHtmlStream = '';
+        MapPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8');
+        MapPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/alert.ejs','utf8');
+        MapPageErrorHtmlStream += fs.readFileSync(__dirname + '/../views/footer.ejs','utf8');
+
+        res.status(562).end(ejs.render(MapPageErrorHtmlStream, {
+                                                                    'title' : '업무관리 프로그램',
+                                                                    'url'   : '../../',
+                                                                    'error' : '지도 검색 페이지를 출력하는 도중'}));  
+    }
+};
+
 
 router.get('/inquire_worksheet',        GetInquireWorkSheet);
 router.get('/this_worksheet',           GetThisWorkSheet);
@@ -604,6 +633,7 @@ router.get('/search',                   GetSearchPage);
 router.get('/result',                   HandleSearch);
 router.get('/log',                      GetLogPage);
 router.get('/logsearch',                GetSearchLog);
+router.get('/map',                      GetMapPage);
 router.post('/upload_this_worksheet',   HandleThisWorkSheet);
 router.post('/upload_future_worksheet', HandleFutureWorkSheet);
 

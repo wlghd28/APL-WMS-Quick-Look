@@ -110,7 +110,6 @@ io.on('connection', function(socket) {
 */
 function getServerIp() {
     var ifaces = os.networkInterfaces();
-    console.log("ifaces: ", ifaces);
     var result = '';
     
     for (var key in ifaces) {
