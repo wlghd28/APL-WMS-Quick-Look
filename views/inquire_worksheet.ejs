@@ -30,9 +30,9 @@
                     <th height="200" class="table-warning">부업무</th>
                     <td>
                         <textarea style="background-color: #E7F2EB;" rows="10" class="form-control common-work-textarea" 
-                            placeholder="등록된 업무가 없습니다!" disabled><% sub_lastWork.forEach(function (sub_last_work, index, sub_lastWork) { %>날짜 : <%=sub_last_work[sub_last_work.length - index -1].start_date %> ~ <%=sub_last_work[sub_last_work.length - index -1].end_date %>
+                            placeholder="등록된 업무가 없습니다!" disabled><% sub_lastWork.forEach(function (sub_last_work, index, sub_lastWork) { %>날짜 : <%=sub_lastWork[sub_lastWork.length - index -1].start_date %> ~ <%=sub_lastWork[sub_lastWork.length - index -1].end_date %>
 업무 : 
-<%=sub_last_work[sub_last_work.length - index -1].work%>
+<%=sub_lastWork[sub_lastWork.length - index -1].work%>
 -----------------------------------------
 <% }); %>
                         </textarea>
