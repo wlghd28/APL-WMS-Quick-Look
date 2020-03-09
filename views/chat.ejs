@@ -32,7 +32,7 @@
         접속되었을 때 실행(순서 1-1, 접속했을 때 알림을 의미)
     */
     socket.on('connect', function() {
-        var name = prompt('이름을 입력해주세요! ', '');
+        var name = username.value;
 
         // 이름을 입력하지 않으면 익명
         if (!name) 

@@ -45,7 +45,7 @@ const GetChatPage = (req, res) => {
                                                                 'error' : '채팅창을 여는 도중 DB'})); 
             } else {
                 username = results[0].user_name;
-                time = moment(date).format('YYYY.MM.DD HH:mm:ss'); // 시, 분이 안찍힘; ㅇㄴ;
+                time = moment(date).format('YYYY.MM.DD　HH:mm'); 
                 let chatPageHtmlStream = ''; 
 
                 chatPageHtmlStream += fs.readFileSync(__dirname + '/../views/header.ejs','utf8'); 

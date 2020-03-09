@@ -60,22 +60,26 @@ const GetInquireWorkSheet = (req, res) => {
                 console.log(error);
                 res.end("error");
             } else {
+                last_result = results[0]; 
+                sub_last_result = results[1];
+
                 if (results[2].length <= 0) 
                     this_result = null;
+                else 
+                    this_result = results[2][0].work; // results는 배열로 받아온다. work는 this_work 테이블 내의 컬럼명.
                 if (results[3].length <= 0)
                     sub_this_result = null;
+                else 
+                    sub_this_result = results[3][0].work;
                 if (results[4].length <= 0)
                     future_result = null;
+                else
+                    future_result = results[4][0].work;
                 if (results[5].length <= 0)
                     sub_future_result = null;
-
-                last_result         = results[0]; 
-                sub_last_result     = results[1];
-                this_result         = results[2][0].work; // results는 배열로 받아온다. work는 this_work 테이블 내의 컬럼명.
-                sub_this_result     = results[3][0].work;
-                future_result       = results[4][0].work;
-                sub_future_result   = results[5][0].work;
-
+                else    
+                    sub_future_result = results[5][0].work;
+                
                 res.end(ejs.render(inquirePageHtmlStream, {
                                                             'title'         :'업무관리 프로그램',
                                                             'url'           :'../../',
@@ -124,12 +128,14 @@ const  GetThisWorkSheet = (req, res) => {
                 console.log(error);
                 res.end("error");
             } else {
-                if (results.length[0] <= 0)
+                if (results[0].length <= 0)
                     this_work = null;
-                if (results.length[1] <= 0)
+                else
+                    this_work = results[0][0].work;
+                if (results[1].length <= 0)
                     sub_this_work = null;
-                this_work       = results[0][0].work;
-                sub_this_work   = results[1][0].work;
+                else
+                    sub_this_work = results[1][0].work;
 
                 res.end(ejs.render(thisWorkPagehtmlStream, {
                                                             'title'         :'업무관리 프로그램',
@@ -288,13 +294,14 @@ const  GetFutureWorkSheet = (req, res) => {
                 console.log(error);
                 res.end("error");
             } else {
-                if (results.length[0] <= 0)
+                if (results[0].length <= 0)
                     futureWork = null;
-                if (results.length[1] <= 0)
+                else
+                    futureWork = results[0][0].work;
+                if (results[1].length <= 0)
                     sub_futureWork = null;
-                
-                futureWork      = results[0][0].work;
-                sub_futureWork  = results[1][0].work;
+                else
+                    sub_futureWork  = results[1][0].work;
 
                 res.end(ejs.render(futureWorkPagehtmlStream, {
                                                                 'title'         :'업무관리 프로그램',
